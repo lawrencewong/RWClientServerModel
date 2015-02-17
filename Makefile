@@ -1,4 +1,4 @@
-all:	a2server
+all:	a2server a2client
 
 a2server:	a2server.c
 	gcc -o a2server a2server.c

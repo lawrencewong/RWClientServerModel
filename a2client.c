@@ -28,7 +28,6 @@ int main(int argc, char**argv)
    char sendline[1000];
    char recvline[1000];
 
-   pthread_t  ;
 
    packet sendpacket;
    sendpacket.clientID = 2;

@@ -15,7 +15,7 @@
 int main(int argc, char**argv)
 {
    int num_iterations = 0;
-   char * filename;
+   char filename[256];
    int num_processes = 0;
    int num_writers = 0;
    int num_readers = 0;
@@ -43,7 +43,7 @@ int main(int argc, char**argv)
    printf("How many processes?\n");
    scanf("%d",&num_processes);
    printf("What is the file name?\n");
-   fgets(filename, 100, stdin);
+   scanf("%s",filename);
 
    num_writers = 0.3 * num_processes;
    num_readers = num_processes - num_writers;

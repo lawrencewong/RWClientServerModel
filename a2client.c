@@ -9,15 +9,22 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <pthread.h>
 #include "a2.h"
 
 int main(int argc, char**argv)
 {
+   int num_iterations = 0;
+   char * filename;
+   int num_processes = 0;
+
+
+
    int sockfd,n;
    struct sockaddr_in servaddr,cliaddr;
    char sendline[1000];
    char recvline[1000];
-   pid_t childPID;
+
    packet sendpacket;
    sendpacket.clientID = 2;
    sendpacket.requestType = 'w';
@@ -29,6 +36,13 @@ int main(int argc, char**argv)
       exit(1);
    }
 
+   printf("How many iterations?\n");
+   scanf("%d",&num_iterations);
+   printf("What is the file name?\n");
+   scanf("%s".filename);
+   printf("How many processes?\n");
+   scanf("%d",&num_processes);
+   
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    bzero(&servaddr,sizeof(servaddr));
@@ -36,25 +50,13 @@ int main(int argc, char**argv)
    servaddr.sin_addr.s_addr=inet_addr(argv[1]);
    servaddr.sin_port=htons(32000);
 
-   // while (fgets(sendline, 10000,stdin) != NULL)
-   // {
-   childPID = fork();
-   if(childPID >= 0){
+   while (fgets(sendline, 10000,stdin) != NULL)
+   {
 
-      if(childPID == 0){ //CHILD
-         sendto(sockfd,&sendpacket,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-         recvline[n]=0;
-         fputs(recvline,stdout);
-      }
-      else{ //PARENT
-         printf("PARENT\n");
-         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-         recvline[n]=0;
-         fputs(recvline,stdout);
-      }
-   }
-      
-   // }
+      sendto(sockfd,&sendpacket,strlen(sendline),0,
+          (struct sockaddr *)&servaddr,sizeof(servaddr));
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
+   } 
 }

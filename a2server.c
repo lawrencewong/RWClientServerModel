@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <a2.h>
 
 int main(int argc, char**argv)
 {
@@ -12,7 +13,7 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    socklen_t len;
    char mesg[1000];
-
+   packet * recvpacketptr;
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    bzero(&servaddr,sizeof(servaddr));
@@ -24,12 +25,12 @@ int main(int argc, char**argv)
    for (;;)
    {
       len = sizeof(cliaddr);
-      n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);
-      //sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      n = recvfrom(sockfd,recvpacketptr,sizeof(packet),0,(struct sockaddr *)&cliaddr,&len);
+      sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       printf("Received the following:\n");
-      printf("%s",mesg);
+      printf("%d",&recvpacketptr->clientID);
       printf("-------------------------------------------------------\n");
    }
 }

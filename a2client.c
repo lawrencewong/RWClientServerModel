@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <a2.h>
 
 int main(int argc, char**argv)
 {
@@ -12,6 +13,13 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    char sendline[1000];
    char recvline[1000];
+   packet sendPacket;
+   packet * sendpacketptr;
+   sendpacket.clientID = 2;
+   sendpacket.requestType = 'w';
+   sendpacket.filename = malloc(sizeof("test.txt"));
+   sendpacketptr = malloc(sizeof(packet));
+   sendpacketptr = sendpacket;
 
    if (argc != 2)
    {
@@ -28,10 +36,10 @@ int main(int argc, char**argv)
 
    while (fgets(sendline, 10000,stdin) != NULL)
    {
-      sendto(sockfd,sendline,strlen(sendline),0,
+      sendto(sockfd,sendpacketptr,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-      // n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-      // recvline[n]=0;
-      // fputs(recvline,stdout);
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
    }
 }

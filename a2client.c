@@ -43,7 +43,7 @@ int main(int argc, char**argv)
    printf("How many processes?\n");
    scanf("%d",&num_processes);
    printf("What is the file name?\n");
-   scanf("%s",filename);
+   fgets(filename, 100, stdin);
 
    num_writers = 0.3 * num_processes;
    num_readers = num_processes - num_writers;

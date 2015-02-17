@@ -1,43 +1,33 @@
-#include <arpa/inet.h>
+/* Sample UDP server */
+
+#include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <unistd.h>
 
-#define BUFLEN 512
-#define NPACK 10
-#define PORT 9930
-
-void diep(char *s)
+int main(int argc, char**argv)
 {
-	perror(s);
-	exit(1);
-}
+   int sockfd,n;
+   struct sockaddr_in servaddr,cliaddr;
+   socklen_t len;
+   char mesg[1000];
 
-int main(void)
-{
-	struct sockaddr_in si_me, si_other;
-	int s, i, slen=sizeof(si_other);
-	char buf[BUFLEN];
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
-	if ((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP))==-1)
-	diep("socket");
+   bzero(&servaddr,sizeof(servaddr));
+   servaddr.sin_family = AF_INET;
+   servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
+   servaddr.sin_port=htons(32000);
+   bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
 
-	memset((char *) &si_me, 0, sizeof(si_me));
-	si_me.sin_family = AF_INET;
-	si_me.sin_port = htons(PORT);
-	si_me.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (bind(s, &si_me, sizeof(si_me))==-1)
-		diep("bind");
-
-	for (i=0; i<NPACK; i++) {
-		if (recvfrom(s, buf, BUFLEN, 0, &si_other, &slen)==-1)
-			diep("recvfrom()");
-		printf("Received packet from %s:%d\nData: %s\n\n", 
-		inet_ntoa(si_other.sin_addr), ntohs(si_other.sin_port), buf);
-	}
-
-	close(s);
-	return 0;
+   for (;;)
+   {
+      len = sizeof(cliaddr);
+      n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);
+      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      printf("-------------------------------------------------------\n");
+      mesg[n] = 0;
+      printf("Received the following:\n");
+      printf("%s",mesg);
+      printf("-------------------------------------------------------\n");
+   }
 }

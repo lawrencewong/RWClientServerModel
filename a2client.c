@@ -1,30 +1,35 @@
-#define SRV_IP "999.999.999.999"
-/* diep(), #includes and #defines like in the server */
+/* Sample UDP client */
 
-int main(void)
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdio.h>
+
+int main(int argc, char**argv)
 {
-    struct sockaddr_in si_other;
-    int s, i, slen=sizeof(si_other);
-    char buf[BUFLEN];
+   int sockfd,n;
+   struct sockaddr_in servaddr,cliaddr;
+   char sendline[1000];
+   char recvline[1000];
 
-    if ((s=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP))==-1)
-        diep("socket");
+   if (argc != 2)
+   {
+      printf("usage:  udpcli <IP address>\n");
+      exit(1);
+   }
 
-    memset((char *) &si_other, 0, sizeof(si_other));
-    si_other.sin_family = AF_INET;
-    si_other.sin_port = htons(PORT);
-    if (inet_aton(SRV_IP, &si_other.sin_addr)==0) {
-        fprintf(stderr, "inet_aton() failed\n");
-        exit(1);
-    }
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
-    for (i=0; i<NPACK; i++) {
-        printf("Sending packet %d\n", i);
-        sprintf(buf, "This is packet %d\n", i);
-        if (sendto(s, buf, BUFLEN, 0, &si_other, slen)==-1)
-            diep("sendto()");
-    }
+   bzero(&servaddr,sizeof(servaddr));
+   servaddr.sin_family = AF_INET;
+   servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+   servaddr.sin_port=htons(32000);
 
-    close(s);
-    return 0;
+   while (fgets(sendline, 10000,stdin) != NULL)
+   {
+      sendto(sockfd,sendline,strlen(sendline),0,
+             (struct sockaddr *)&servaddr,sizeof(servaddr));
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
+   }
 }

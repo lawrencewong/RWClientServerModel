@@ -19,13 +19,16 @@ int main(int argc, char**argv)
    int num_processes = 0;
    int num_writers = 0;
    int num_readers = 0;
-
+   int i = 0;
+   int ret = 0;
 
 
    int sockfd,n;
    struct sockaddr_in servaddr,cliaddr;
    char sendline[1000];
    char recvline[1000];
+
+   pthread_t  ;
 
    packet sendpacket;
    sendpacket.clientID = 2;
@@ -61,9 +64,8 @@ int main(int argc, char**argv)
    servaddr.sin_addr.s_addr=inet_addr(argv[1]);
    servaddr.sin_port=htons(32000);
 
-   while (fgets(sendline, 10000,stdin) != NULL)
-   {
-
+   sendpacket.clientID = sockfd;
+   for(i=0;i<num_iterations;i++){
       sendto(sockfd,&sendpacket,strlen(sendline),0,
           (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);

@@ -21,6 +21,7 @@ int main(int argc, char**argv)
    int num_readers = 0;
    int i = 0;
    int ret = 0;
+   FILE *fp;
 
 
    int sockfd,n;
@@ -29,10 +30,12 @@ int main(int argc, char**argv)
    char recvline[1000];
 
 
-   packet sendpacket;
-   sendpacket.clientID = 2;
-   sendpacket.requestType = 'w';
-   sendpacket.filename = malloc(sizeof("test.txt"));
+   
+
+   // packet sendpacket;
+   // sendpacket.clientID = 2;
+   // sendpacket.requestType = 'w';
+   // sendpacket.filename = malloc(sizeof("test.txt"));
 
    if (argc != 2)
    {
@@ -53,7 +56,7 @@ int main(int argc, char**argv)
    printf("Number of processes: %d Number of Writers: %d Number of Readers: %d \n",num_processes, num_writers, num_readers);
    printf("Filename: %s\n",filename);
 
-
+   initializeFile(num_writers, filename);
    
 
    
@@ -66,11 +69,29 @@ int main(int argc, char**argv)
       servaddr.sin_port=htons(32000);
 
       sendpacket.clientID = sockfd;
-      
+
       sendto(sockfd,&sendpacket,strlen(sendline),0,
           (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
       fputs(recvline,stdout);
    } 
+}
+
+// Filling the shared memory file with 0's.
+void* initializeFile(int num_writers, char * filename){
+   int fill = 0;
+   int i = 0;
+   FILE *fp;
+   fp =fopen(filename,"w+");
+
+   if(fp != NULL){
+      for(i = 0; i < num_writers; i++){
+         fwrite(&fill, sizeof(int), 1, fp);
+      }
+      fclose(fp);
+   }else{
+      printf("Could not open file.\n");
+      exit(1);
+   }
 }

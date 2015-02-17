@@ -17,6 +17,8 @@ int main(int argc, char**argv)
    int num_iterations = 0;
    char * filename;
    int num_processes = 0;
+   int num_writers = 0;
+   int num_readers = 0;
 
 
 
@@ -38,10 +40,19 @@ int main(int argc, char**argv)
 
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
-   printf("What is the file name?\n");
-   scanf("%s",filename);
    printf("How many processes?\n");
    scanf("%d",&num_processes);
+   printf("What is the file name?\n");
+   scanf("%s",filename);
+
+   num_writers = 0.3 * num_processes;
+   num_readers = num_processes - num_writers;
+   printf("Number of iterations: %d\n",num_iterations);
+   printf("Number of processes: %d Number of Writers: %d Number of Readers: %d \n",num_processes, num_writers, num_readers);
+   printf("Filename: %s\n",filename);
+
+
+   
 
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 

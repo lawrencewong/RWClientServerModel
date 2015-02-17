@@ -15,7 +15,7 @@ int main(int argc, char**argv)
    char mesg[1000];
    packet * recvpacketptr;
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
-
+   recvpacketptr = malloc(sizeof(packet));
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=htonl(INADDR_ANY);

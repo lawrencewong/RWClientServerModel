@@ -19,7 +19,7 @@ int main(int argc, char**argv)
    sendpacket.requestType = 'w';
    sendpacket.filename = malloc(sizeof("test.txt"));
    sendpacketptr = malloc(sizeof(packet));
-   sendpacketptr = sendpacket;
+   &sendpacketptr = sendpacket;
 
    if (argc != 2)
    {

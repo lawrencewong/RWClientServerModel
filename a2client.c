@@ -39,10 +39,10 @@ int main(int argc, char**argv)
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
    printf("What is the file name?\n");
-   scanf("%s".filename);
+   scanf("%s",filename);
    printf("How many processes?\n");
    scanf("%d",&num_processes);
-   
+
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    bzero(&servaddr,sizeof(servaddr));

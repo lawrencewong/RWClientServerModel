@@ -30,7 +30,7 @@ int main(int argc, char**argv)
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       printf("Received the following:\n");
-      printf("%d",&recvpacketptr->clientID);
+      printf("%d",recvpacketptr->clientID);
       printf("-------------------------------------------------------\n");
    }
 }

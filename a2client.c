@@ -13,7 +13,7 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    char sendline[1000];
    char recvline[1000];
-   packet sendPacket;
+   packet sendpacket;
    packet * sendpacketptr;
    sendpacket.clientID = 2;
    sendpacket.requestType = 'w';

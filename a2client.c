@@ -14,12 +14,9 @@ int main(int argc, char**argv)
    char sendline[1000];
    char recvline[1000];
    packet sendpacket;
-   packet * sendpacketptr;
    sendpacket.clientID = 2;
    sendpacket.requestType = 'w';
    sendpacket.filename = malloc(sizeof("test.txt"));
-   sendpacketptr = malloc(sizeof(packet));
-   &sendpacketptr = sendpacket;
 
    if (argc != 2)
    {
@@ -36,7 +33,7 @@ int main(int argc, char**argv)
 
    while (fgets(sendline, 10000,stdin) != NULL)
    {
-      sendto(sockfd,sendpacketptr,strlen(sendline),0,
+      sendto(sockfd,&sendpacket,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;

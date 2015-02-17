@@ -50,6 +50,9 @@ int main(int argc, char**argv)
       }
       else{ //PARENT
          printf("PARENT\n");
+         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+         recvline[n]=0;
+         fputs(recvline,stdout);
       }
    }
       

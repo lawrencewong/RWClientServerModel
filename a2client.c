@@ -56,15 +56,17 @@ int main(int argc, char**argv)
 
    
 
-   sockfd=socket(AF_INET,SOCK_DGRAM,0);
-
-   bzero(&servaddr,sizeof(servaddr));
-   servaddr.sin_family = AF_INET;
-   servaddr.sin_addr.s_addr=inet_addr(argv[1]);
-   servaddr.sin_port=htons(32000);
-
-   sendpacket.clientID = sockfd;
+   
    for(i=0;i<num_iterations;i++){
+      sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+      bzero(&servaddr,sizeof(servaddr));
+      servaddr.sin_family = AF_INET;
+      servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+      servaddr.sin_port=htons(32000);
+
+      sendpacket.clientID = sockfd;
+      
       sendto(sockfd,&sendpacket,strlen(sendline),0,
           (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);

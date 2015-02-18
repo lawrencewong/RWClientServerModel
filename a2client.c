@@ -32,10 +32,7 @@ int main(int argc, char**argv)
 
    
 
-   // packet sendpacket;
-   // sendpacket.clientID = 2;
-   // sendpacket.requestType = 'w';
-   // sendpacket.filename = malloc(sizeof("test.txt"));
+   
 
    if (argc != 2)
    {
@@ -58,6 +55,10 @@ int main(int argc, char**argv)
 
    initializeFile(num_writers, filename);
    
+   packet sendpacket;
+   sendpacket.clientID = 2;
+   sendpacket.requestType = 'w';
+   sendpacket.filename = malloc(sizeof(filename));
 
    
    for(i=0;i<num_iterations;i++){

@@ -13,7 +13,7 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    socklen_t len;
    char mesg[1000];
-   packet recvpacketptr;
+   packet * recvpacketptr;
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
    recvpacketptr = malloc(sizeof(packet));
    bzero(&servaddr,sizeof(servaddr));

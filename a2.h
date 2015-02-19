@@ -1,5 +1,6 @@
 typedef struct {
 	int clientID;
+	pid_t pid;
 	char requestType;
 	char * filename;
 } packet;

@@ -25,7 +25,7 @@ int main(int argc, char**argv)
    while(1)
    {
       len = sizeof(cliaddr);
-      n = recvfrom(sockfd,recvpacketptr,sizeof(recvpacketptr),0,(struct sockaddr *)&cliaddr,&len);
+      n = recvfrom(sockfd,recvpacketptr,sizeof(packet),0,(struct sockaddr *)&cliaddr,&len);
       sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;

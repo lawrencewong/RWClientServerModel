@@ -2,7 +2,7 @@ typedef struct {
 	int clientID;
 	pid_t pid;
 	char requestType;
-	char filename[256];
+	char * filename;
 } packet;
 
 // Information for each thread, including the thread's lock and all of the reader's locks
@@ -11,7 +11,7 @@ typedef struct {
 	int iterations;
 	int writers;
 	int readers;
-	char filename[256];
+	char * filename;
 } thread_data;
 
 // initializeFile function sets up the binary file based on how many writer threads there will be.

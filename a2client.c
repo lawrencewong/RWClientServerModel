@@ -62,7 +62,7 @@ int main(int argc, char**argv)
       readers_thread_data[i].iterations = num_iterations;
       readers_thread_data[i].writers = num_writers;
       readers_thread_data[i].readers = num_readers;
-      // readers_thread_data[i].filename = malloc(sizeof(filename));
+      readers_thread_data[i].filename = malloc(sizeof(filename));
       readers_thread_data[i].filename = filename;
       ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
       if(ret != 0){
@@ -77,7 +77,7 @@ int main(int argc, char**argv)
       writers_thread_data[i].iterations = num_iterations;
       writers_thread_data[i].writers = num_writers;
       writers_thread_data[i].readers = num_readers;
-      // writers_thread_data[i].filename = malloc(sizeof(filename));
+      writers_thread_data[i].filename = malloc(sizeof(filename));
       writers_thread_data[i].filename = filename;
       ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
       if(ret != 0){
@@ -91,7 +91,7 @@ int main(int argc, char**argv)
    sendpacket.clientID = 2;
    sendpacket.pid = getpid();
    sendpacket.requestType = 'w';
-   // sendpacket.filename = malloc(sizeof(filename));
+   sendpacket.filename = malloc(sizeof(filename));
    sendpacket.filename = filename;
    
    for(i=0;i<num_iterations;i++){

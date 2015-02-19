@@ -13,9 +13,9 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    socklen_t len;
    char mesg[1000];
-   packet * recvpacketptr;
+   packet recvpacketptr;
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
-   // recvpacketptr = malloc(sizeof(packet));
+   recvpacketptr = malloc(sizeof(packet));
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
@@ -25,7 +25,7 @@ int main(int argc, char**argv)
    while(1)
    {
       len = sizeof(cliaddr);
-      n = recvfrom(sockfd,recvpacketptr,sizeof(packet),0,(struct sockaddr *)&cliaddr,&len);
+      n = recvfrom(sockfd,recvpacketptr,sizeof(recvpacketptr),0,(struct sockaddr *)&cliaddr,&len);
       sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;

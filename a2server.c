@@ -25,12 +25,12 @@ int main(int argc, char**argv)
    while(1)
    {
       len = sizeof(cliaddr);
-      n = recvfrom(sockfd,recvpacketptr,sizeof(recvpacketptr),0,(struct sockaddr *)&cliaddr,&len);
+      n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);
       sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       printf("Received the following:\n");
-      printf("CLient ID: %d, Request: %c Filename: %s PID: %d\n",recvpacketptr->clientID,recvpacketptr->requestType,recvpacketptr->filename,recvpacketptr->pid);
+      printf("CLient ID: %d\n",mesg);
       printf("-------------------------------------------------------\n");
    }
 }

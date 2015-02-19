@@ -93,7 +93,8 @@ int main(int argc, char**argv)
    sendpacket.requestType = 'w';
    sendpacket.filename = malloc(sizeof(filename));
    sendpacket.filename = filename;
-   
+
+   sprintf(sendline, "%d", 2); 
    for(i=0;i<num_iterations;i++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -104,7 +105,7 @@ int main(int argc, char**argv)
 
       sendpacket.clientID = sockfd;
 
-      sendto(sockfd,&sendpacket,sizeof(sendpacket),0,
+      sendto(sockfd,sendline, 10000,0,
           (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;

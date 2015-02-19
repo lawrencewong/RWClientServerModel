@@ -22,7 +22,7 @@ int main(int argc, char**argv)
    servaddr.sin_port=htons(32000);
    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
 
-   for (;;)
+   while(1)
    {
       len = sizeof(cliaddr);
       n = recvfrom(sockfd,recvpacketptr,sizeof(packet),0,(struct sockaddr *)&cliaddr,&len);
@@ -30,7 +30,7 @@ int main(int argc, char**argv)
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       printf("Received the following:\n");
-      printf("%d",recvpacketptr->clientID);
+      printf("CLient ID: %d, Request: %c Filename: %s PID: %d\n",recvpacketptr->clientID,recvpacketptr->requestType,recvpacketptr->filename,recvpacketptr->pid);
       printf("-------------------------------------------------------\n");
    }
 }

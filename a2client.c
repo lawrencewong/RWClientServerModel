@@ -89,6 +89,7 @@ int main(int argc, char**argv)
 
    packet sendpacket;
    sendpacket.clientID = 2;
+   sendpacket.pid = getpid();
    sendpacket.requestType = 'w';
    sendpacket.filename = malloc(sizeof(filename));
 
@@ -114,11 +115,9 @@ int main(int argc, char**argv)
    // Cleaning up the simulation.
    for(i=0;i<num_writers;i++){
       pthread_join(writers_thread[i],NULL);
-      free(writers_thread_data[i].filename);
    }
    for(i=0;i<num_readers;i++){
       pthread_join(readers_thread[i],NULL);
-      free(readers_thread_data[i].filename);
    }
 
    pthread_exit(NULL);

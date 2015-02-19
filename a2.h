@@ -10,6 +10,7 @@ typedef struct {
 	int iterations;
 	int writers;
 	int readers;
+	char * filename;
 } thread_data;
 
 // initializeFile function sets up the binary file based on how many writer threads there will be.

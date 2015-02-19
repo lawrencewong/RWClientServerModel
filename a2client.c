@@ -113,11 +113,11 @@ int main(int argc, char**argv)
 
    // Cleaning up the simulation.
    for(i=0;i<num_writers;i++){
-      free(writers_thread_data[i].filename)
+      free(writers_thread_data[i].filename);
       pthread_join(writers_thread[i],NULL);
    }
    for(i=0;i<num_readers;i++){
-      free(readers_thread_data[i].filename)
+      free(readers_thread_data[i].filename);
       pthread_join(readers_thread[i],NULL);
    }
 

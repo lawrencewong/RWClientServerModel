@@ -20,7 +20,7 @@ int main(int argc, char**argv)
    char mesg[1000];
    char *token;
    const char delim[2] = "|";
-   char filename[256];
+   char * filename;
    char requestType;
    int clientID;
    int pid;
@@ -51,6 +51,7 @@ int main(int argc, char**argv)
       token = strtok(NULL, delim);
       requestType = token[0];
       token = strtok(NULL, delim);
+      filename = malloc(sizeof(token));
       filename = token;
       printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
       

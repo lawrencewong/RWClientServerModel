@@ -91,7 +91,9 @@ int main(int argc, char**argv)
 
    sprintf(sendline, "%d", 2); 
    strcat(sendline,"|");
-   sprintf(buffer, "%d", getpid());
+   pid_t pid = getpid();
+   sprintf(buffer, "%d", pid);
+   strcat(sendline,buffer);
    strcat(sendline,"|");
    strcat(sendline,"w");
    strcat(sendline,"|");
@@ -105,7 +107,7 @@ int main(int argc, char**argv)
       servaddr.sin_addr.s_addr=inet_addr(argv[1]);
       servaddr.sin_port=htons(32000);
 
-      sendpacket.clientID = sockfd;
+
 
       sendto(sockfd,sendline, 10000,0,
           (struct sockaddr *)&servaddr,sizeof(servaddr));

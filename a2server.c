@@ -45,9 +45,9 @@ int main(int argc, char**argv)
 
       printf("CLient ID: %s\n",mesg);
       token = strtok(mesg, delim);
-      clientID = token;
+      clientID = atoi(token);
       token = strtok(NULL, delim);
-      pid = token[0] - '0';
+      pid = atoi(token);
       token = strtok(NULL, delim);
       requestType = token;
       filename = token;

@@ -12,6 +12,10 @@
 #include <pthread.h>
 #include "a2.h"
 
+int sockfd,n;
+struct sockaddr_in servaddr,cliaddr;
+
+
 int main(int argc, char**argv)
 {
    int num_iterations = 0;
@@ -24,11 +28,8 @@ int main(int argc, char**argv)
    FILE *fp;
 
 
-   int sockfd,n;
-   struct sockaddr_in servaddr,cliaddr;
-   char sendline[1000];
-   char recvline[1000];
-   char buffer[1000];
+
+
 
    if (argc != 2)
    {
@@ -89,32 +90,24 @@ int main(int argc, char**argv)
 
 
 
-   sprintf(sendline, "%d", 2); 
-   strcat(sendline,"|");
-   pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"w");
-   strcat(sendline,"|");
-   strcat(sendline,filename);
 
-   for(i=0;i<num_iterations;i++){
-      sockfd=socket(AF_INET,SOCK_DGRAM,0);
+   // for(i=0;i<num_iterations;i++){
 
-      bzero(&servaddr,sizeof(servaddr));
-      servaddr.sin_family = AF_INET;
-      servaddr.sin_addr.s_addr=inet_addr(argv[1]);
-      servaddr.sin_port=htons(32000);
+   //    sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+   //    bzero(&servaddr,sizeof(servaddr));
+   //    servaddr.sin_family = AF_INET;
+   //    servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+   //    servaddr.sin_port=htons(32000);
 
 
 
-      sendto(sockfd,sendline, 10000,0,
-          (struct sockaddr *)&servaddr,sizeof(servaddr));
-      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-      recvline[n]=0;
-      fputs(recvline,stdout);
-   } 
+   //    sendto(sockfd,sendline, 10000,0,
+   //        (struct sockaddr *)&servaddr,sizeof(servaddr));
+   //    n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+   //    recvline[n]=0;
+   //    fputs(recvline,stdout);
+   // } 
 
 
    // Cleaning up the simulation.
@@ -155,6 +148,35 @@ void* increment(void* parameter){
    int value = 0;
    int i;
    int k;
+
+   char sendline[1000];
+   char recvline[1000];
+   char buffer[1000];
+
+   sprintf(sendline, "%d", 2); 
+   strcat(sendline,"|");
+   pid_t pid = getpid();
+   sprintf(buffer, "%d", pid);
+   strcat(sendline,buffer);
+   strcat(sendline,"|");
+   strcat(sendline,"w");
+   strcat(sendline,"|");
+   strcat(sendline,filename);
+
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+   bzero(&servaddr,sizeof(servaddr));
+   servaddr.sin_family = AF_INET;
+   servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+   servaddr.sin_port=htons(32000);
+
+
+
+   sendto(sockfd,sendline, 10000,0,
+    (struct sockaddr *)&servaddr,sizeof(servaddr));
+   n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+   recvline[n]=0;
+   fputs(recvline,stdout);
 
    for(k=1;k<=cur_thread->iterations;k++){
 

@@ -165,7 +165,7 @@ void* increment(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,"w");
    strcat(sendline,"|");
-   strcat(sendline,filename);
+   strcat(sendline,cur_thread->filename);
 
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 

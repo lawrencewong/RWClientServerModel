@@ -5,6 +5,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <errno.h>
+#include <sys/wait.h>
+#include <pthread.h>
 #include "a2.h"
 
 int main(int argc, char**argv)
@@ -13,6 +18,12 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    socklen_t len;
    char mesg[1000];
+   char *token;
+   const char delim[2] = "|";
+   char filename[256];
+   char requestType;
+   int clientID;
+   int pid;
    packet * recvpacketptr;
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
    recvpacketptr = malloc(sizeof(packet));
@@ -29,8 +40,19 @@ int main(int argc, char**argv)
       sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
+      
       printf("Received the following:\n");
-      printf("CLient ID: %d\n",mesg);
+
+      printf("CLient ID: %s\n",mesg);
+      token = strtok(mesg, delim);
+      clientID = token;
+      token = strtok(NULL, delim);
+      pid = token[0] - '0';
+      token = strtok(NULL, delim);
+      requestType = token;
+      filename = token;
+      printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
+      
       printf("-------------------------------------------------------\n");
    }
 }

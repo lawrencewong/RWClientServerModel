@@ -28,6 +28,7 @@ int main(int argc, char**argv)
    struct sockaddr_in servaddr,cliaddr;
    char sendline[1000];
    char recvline[1000];
+   char buffer[1000];
 
    if (argc != 2)
    {
@@ -87,14 +88,15 @@ int main(int argc, char**argv)
    }
 
 
-   packet sendpacket;
-   sendpacket.clientID = 2;
-   sendpacket.pid = getpid();
-   sendpacket.requestType = 'w';
-   sendpacket.filename = malloc(sizeof(filename));
-   sendpacket.filename = filename;
 
    sprintf(sendline, "%d", 2); 
+   strcat(sendline,"|");
+   sprintf(buffer, "%d", getpid());
+   strcat(sendline,"|");
+   strcat(sendline,"w");
+   strcat(sendline,"|");
+   strcat(sendline,filename);
+
    for(i=0;i<num_iterations;i++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 

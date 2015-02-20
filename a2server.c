@@ -49,7 +49,8 @@ int main(int argc, char**argv)
       token = strtok(NULL, delim);
       pid = atoi(token);
       token = strtok(NULL, delim);
-      requestType = token;
+      requestType = token[0];
+      token = strtok(NULL, delim);
       filename = token;
       printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
       

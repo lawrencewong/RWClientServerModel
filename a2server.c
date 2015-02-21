@@ -14,6 +14,8 @@
 
 #define MAX_CLIENTS 10
 
+ticketNode clientQueues[10];
+
 int main(int argc, char**argv)
 {
    int sockfd,n;
@@ -28,7 +30,7 @@ int main(int argc, char**argv)
    int pid;
    int clientGroups[MAX_CLIENTS] = {0};
    int i;
-   ticketNode clientQueues[10];
+   
 
    
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
@@ -68,6 +70,7 @@ int main(int argc, char**argv)
          if(clientGroups[i] == 0){
             clientGroups[i] = pid;
             printf("New Client\n");
+            startClientQueue(pid, requestType, i);
             break;
          }else if(clientGroups[i] == pid){
             printf("Already have seen this client\n");
@@ -76,4 +79,14 @@ int main(int argc, char**argv)
       }
       printf("-------------------------------------------------------\n");
    }
+}
+
+void startClientQueue(int pid, char requestType, int index){
+   clientGroups[index] = malloc(sizeof(ticketNode));
+   clientGroups[index].pid = pid;
+   clientGroups[index].requestType = requestType;
+   clientGroups[index].head = malloc(sizeof(ticketNode));
+   clientGroups[index].head = NULL;
+   clientGroups[index].ahead = malloc(sizeof(ticketNode));
+   clientGroups[index].ahead = NULL;
 }

@@ -10,7 +10,6 @@ typedef struct {
 
 typedef struct{
 	int pid;
-	char * filename;
 	char requestType;
 	struct ticketNode * head;
 	struct ticketNode * ahead;
@@ -22,3 +21,5 @@ void* initializeFile(int num_writers, char * filename);
 void* increment(void* parameter);
 // readNumber function that is used for reader threads. The thread will run for the amount of iterations. Before reading it will use it's own lock.
 void* readNumber(void* parameter);
+//
+void startClientQueue(int pid, char requestType, int index);

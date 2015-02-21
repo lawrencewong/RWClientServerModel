@@ -126,14 +126,14 @@ int main(int argc, char**argv)
 
 
    // Cleaning up the simulation.
-   for(i=0;i<num_writers;i++){
-      pthread_join(writers_thread[i],NULL);
-   }
-   for(i=0;i<num_readers;i++){
-      pthread_join(readers_thread[i],NULL);
-   }
+   // for(i=0;i<num_writers;i++){
+   //    pthread_join(writers_thread[i],NULL);
+   // }
+   // for(i=0;i<num_readers;i++){
+   //    pthread_join(readers_thread[i],NULL);
+   // }
 
-   pthread_exit(NULL);
+   // pthread_exit(NULL);
    return 0;
 }
 

@@ -28,7 +28,7 @@ int main(int argc, char**argv)
    int pid;
    int clientGroups[MAX_CLIENTS] = {0};
    int i;
-
+   ticketNode clientQueues[10];
 
    
    sockfd=socket(AF_INET,SOCK_DGRAM,0);

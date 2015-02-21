@@ -32,6 +32,7 @@ int main(int argc, char**argv)
    int i;
    
 
+
    
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -77,6 +78,12 @@ int main(int argc, char**argv)
             break;
          }
       }
+      for(i=0;i<MAX_CLIENTS;i++){
+         if(clientQueues[i] != NULL){
+            printf("%d\n", clientQueues[i]);
+         }
+      }
+
       printf("-------------------------------------------------------\n");
    }
 }

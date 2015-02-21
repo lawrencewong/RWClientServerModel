@@ -170,7 +170,7 @@ void* increment(void* parameter){
 
 
    for(k=1;k<=cur_thread->iterations;k++){
-         printf("Connecting\n");
+         printf(" Writer Connecting\n");
          sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
          bzero(&servaddr,sizeof(servaddr));
@@ -232,7 +232,7 @@ void* readNumber(void* parameter){
    for(k=1;k<=cur_thread->iterations;k++){
 
 
-         printf("Connecting\n");
+         printf(" Reader Connecting\n");
          sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
          bzero(&servaddr,sizeof(servaddr));

@@ -27,8 +27,9 @@ int main(int argc, char**argv)
    int ret = 0;
    FILE *fp;
 
-
-
+   char sendline[1000];
+   char recvline[1000];
+   char buffer[1000];
 
 
    if (argc != 2)
@@ -94,23 +95,34 @@ int main(int argc, char**argv)
 
 
 
+   sprintf(sendline, "%d", 2); 
+   strcat(sendline,"|");
+   pid_t pid = getpid();
+   sprintf(buffer, "%d", pid);
+   strcat(sendline,buffer);
+   strcat(sendline,"|");
+   strcat(sendline,"w");
+   strcat(sendline,"|");
+   strcat(sendline,cur_thread->filename);
+
+
 
    // for(i=0;i<num_iterations;i++){
 
-   //    sockfd=socket(AF_INET,SOCK_DGRAM,0);
+      sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
-   //    bzero(&servaddr,sizeof(servaddr));
-   //    servaddr.sin_family = AF_INET;
-   //    servaddr.sin_addr.s_addr=inet_addr(argv[1]);
-   //    servaddr.sin_port=htons(32000);
+      bzero(&servaddr,sizeof(servaddr));
+      servaddr.sin_family = AF_INET;
+      servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+      servaddr.sin_port=htons(32000);
 
 
 
-   //    sendto(sockfd,sendline, 10000,0,
-   //        (struct sockaddr *)&servaddr,sizeof(servaddr));
-   //    n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-   //    recvline[n]=0;
-   //    fputs(recvline,stdout);
+      sendto(sockfd,sendline, 10000,0,
+          (struct sockaddr *)&servaddr,sizeof(servaddr));
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
    // } 
 
 
@@ -153,40 +165,7 @@ void* increment(void* parameter){
    int i;
    int k;
 
-   char sendline[1000];
-   char recvline[1000];
-   char buffer[1000];
-
-   sprintf(sendline, "%d", 2); 
-   strcat(sendline,"|");
-   pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"w");
-   strcat(sendline,"|");
-   strcat(sendline,cur_thread->filename);
-
-
-
    for(k=1;k<=cur_thread->iterations;k++){
-         printf(" Writer Connecting\n");
-         sockfd=socket(AF_INET,SOCK_DGRAM,0);
-
-         bzero(&servaddr,sizeof(servaddr));
-         servaddr.sin_family = AF_INET;
-         servaddr.sin_addr.s_addr=inet_addr(cur_thread->dest);
-         servaddr.sin_port=htons(32000);
-
-
-
-         sendto(sockfd,sendline, 10000,0,
-          (struct sockaddr *)&servaddr,sizeof(servaddr));
-         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-         recvline[n]=0;
-         fputs(recvline,stdout);
-         printf("Recieved : %s\n", recvline);
-
       fp = fopen(cur_thread->filename,"rb+");
 
       for( i = 0; i < cur_thread->writers; i++){
@@ -215,40 +194,7 @@ void* readNumber(void* parameter){
    int i;
    int k;
 
-   char sendline[1000];
-   char recvline[1000];
-   char buffer[1000];
-
-   sprintf(sendline, "%d", 2); 
-   strcat(sendline,"|");
-   pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"r");
-   strcat(sendline,"|");
-   strcat(sendline,cur_thread->filename);
-
    for(k=1;k<=cur_thread->iterations;k++){
-
-
-         printf(" Reader Connecting\n");
-         sockfd=socket(AF_INET,SOCK_DGRAM,0);
-
-         bzero(&servaddr,sizeof(servaddr));
-         servaddr.sin_family = AF_INET;
-         servaddr.sin_addr.s_addr=inet_addr(cur_thread->dest);
-         servaddr.sin_port=htons(32000);
-
-
-
-         sendto(sockfd,sendline, 10000,0,
-          (struct sockaddr *)&servaddr,sizeof(servaddr));
-         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-         recvline[n]=0;
-         fputs(recvline,stdout);
-         printf("Recieved : %s\n", recvline);
-
       strcpy(contents_string,"");
       fp = fopen(cur_thread->filename,"rb+");
       fread(contents, sizeof(int),cur_thread->writers, fp);

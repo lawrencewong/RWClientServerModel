@@ -213,10 +213,10 @@ void* readNumber(void* parameter){
    sprintf(buffer, "%d", pid);
    strcat(sendline,buffer);
    strcat(sendline,"|");
-   strcat(sendline,"w");
+   strcat(sendline,"r");
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
-   
+
    for(k=1;k<=cur_thread->iterations;k++){
        printf("Reader connecting\n");
             sendto(sockfd,sendline,strlen(sendline),0,

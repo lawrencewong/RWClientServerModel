@@ -1,10 +1,3 @@
-typedef struct {
-	int clientID;
-	pid_t pid;
-	char requestType;
-	char * filename;
-} packet;
-
 // Information for each thread, including the thread's lock and all of the reader's locks
 typedef struct {
 	int thread_id;

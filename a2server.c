@@ -12,6 +12,8 @@
 #include <pthread.h>
 #include "a2.h"
 
+#define MAX_CLIENTS 10
+
 int main(int argc, char**argv)
 {
    int sockfd,n;
@@ -24,14 +26,19 @@ int main(int argc, char**argv)
    char requestType;
    int clientID;
    int pid;
-   packet * recvpacketptr;
+   int clientGroups[MAX_CLIENTS] = {0};
+   int i;
+
+
+   
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
-   recvpacketptr = malloc(sizeof(packet));
+
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
    servaddr.sin_port=htons(32000);
    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
+
 
    while(1)
    {
@@ -54,8 +61,19 @@ int main(int argc, char**argv)
       token = strtok(NULL, delim);
       filename = malloc(sizeof(token));
       filename = token;
+
       printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
       
+      for(i=0;i<MAX_CLIENTS;i++){
+         if(clientGroups[i] == 0){
+            clientGroups[i] = pid;
+            printf("New Client\n");
+            break;
+         }else if(clientGroups[i] == pid){
+            printf("Already have seen this client\n");
+            break;
+         }
+      }
       printf("-------------------------------------------------------\n");
    }
 }

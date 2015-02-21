@@ -95,7 +95,7 @@ int main(int argc, char**argv)
 
 
 
-   sprintf(sendline, "%d", 2); 
+   sprintf(sendline, "%d", 68); 
    strcat(sendline,"|");
    pid_t pid = getpid();
    sprintf(buffer, "%d", pid);
@@ -103,7 +103,7 @@ int main(int argc, char**argv)
    strcat(sendline,"|");
    strcat(sendline,"w");
    strcat(sendline,"|");
-   strcat(sendline,cur_thread->filename);
+   strcat(sendline,filename);
 
 
 

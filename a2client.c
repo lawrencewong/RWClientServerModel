@@ -117,15 +117,11 @@ int main(int argc, char**argv)
       servaddr.sin_port=htons(32000);
 
 
-
-      while (fgets(sendline, 10000,stdin) != NULL)
-   {
       sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
       fputs(recvline,stdout);
-   }
    // } 
 
 

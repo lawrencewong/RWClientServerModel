@@ -69,11 +69,11 @@ int main(int argc, char**argv)
       readers_thread_data[i].filename = filename;
       readers_thread_data[i].dest = malloc(sizeof(argv[1]));
       readers_thread_data[i].dest = argv[1];
-      ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
-      if(ret != 0){
-         printf("Create pthread error!\n");
-         exit(1);
-      }
+      // ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
+      // if(ret != 0){
+      //    printf("Create pthread error!\n");
+      //    exit(1);
+      // }
    }
 
    // Setting up the writer threads.
@@ -86,11 +86,11 @@ int main(int argc, char**argv)
       writers_thread_data[i].filename = filename;
       writers_thread_data[i].dest = malloc(sizeof(argv[1]));
       writers_thread_data[i].dest = argv[1];
-      ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
-      if(ret != 0){
-         printf("Create pthread error!\n");
-         exit(1);
-      }
+      // ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
+      // if(ret != 0){
+      //    printf("Create pthread error!\n");
+      //    exit(1);
+      // }
    }
 
 

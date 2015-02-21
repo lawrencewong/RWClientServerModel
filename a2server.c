@@ -82,11 +82,11 @@ int main(int argc, char**argv)
 }
 
 void startClientQueue(int pid, char requestType, int index){
-   clientGroups[index] = malloc(sizeof(ticketNode));
-   clientGroups[index].pid = pid;
-   clientGroups[index].requestType = requestType;
-   clientGroups[index].head = malloc(sizeof(ticketNode));
-   clientGroups[index].head = NULL;
-   clientGroups[index].ahead = malloc(sizeof(ticketNode));
-   clientGroups[index].ahead = NULL;
+   clientQueues[index] = malloc(sizeof(ticketNode));
+   clientQueues[index].pid = pid;
+   clientQueues[index].requestType = requestType;
+   clientQueues[index].head = malloc(sizeof(ticketNode));
+   clientQueues[index].head = NULL;
+   clientQueues[index].ahead = malloc(sizeof(ticketNode));
+   clientQueues[index].ahead = NULL;
 }

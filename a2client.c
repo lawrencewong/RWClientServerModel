@@ -12,7 +12,7 @@
 #include <pthread.h>
 #include "a2.h"
 
-int sockfd,n;
+int sockfd;
 struct sockaddr_in servaddr,cliaddr;
 
 
@@ -27,10 +27,14 @@ int main(int argc, char**argv)
    int ret = 0;
    FILE *fp;
 
-   char sendline[1000];
-   char recvline[1000];
-   char buffer[1000];
 
+
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+   bzero(&servaddr,sizeof(servaddr));
+   servaddr.sin_family = AF_INET;
+   servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+   servaddr.sin_port=htons(32000);
 
    if (argc != 2)
    {
@@ -69,11 +73,11 @@ int main(int argc, char**argv)
       readers_thread_data[i].filename = filename;
       readers_thread_data[i].dest = malloc(sizeof(argv[1]));
       readers_thread_data[i].dest = argv[1];
-      // ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
-      // if(ret != 0){
-      //    printf("Create pthread error!\n");
-      //    exit(1);
-      // }
+      ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
+      if(ret != 0){
+         printf("Create pthread error!\n");
+         exit(1);
+      }
    }
 
    // Setting up the writer threads.
@@ -86,11 +90,11 @@ int main(int argc, char**argv)
       writers_thread_data[i].filename = filename;
       writers_thread_data[i].dest = malloc(sizeof(argv[1]));
       writers_thread_data[i].dest = argv[1];
-      // ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
-      // if(ret != 0){
-      //    printf("Create pthread error!\n");
-      //    exit(1);
-      // }
+      ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
+      if(ret != 0){
+         printf("Create pthread error!\n");
+         exit(1);
+      }
    }
 
 
@@ -109,31 +113,22 @@ int main(int argc, char**argv)
 
    // for(i=0;i<num_iterations;i++){
 
-      sockfd=socket(AF_INET,SOCK_DGRAM,0);
-
-      bzero(&servaddr,sizeof(servaddr));
-      servaddr.sin_family = AF_INET;
-      servaddr.sin_addr.s_addr=inet_addr(argv[1]);
-      servaddr.sin_port=htons(32000);
 
 
-      sendto(sockfd,sendline,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-      recvline[n]=0;
-      fputs(recvline,stdout);
+
+
    // } 
 
 
    // Cleaning up the simulation.
-   // for(i=0;i<num_writers;i++){
-   //    pthread_join(writers_thread[i],NULL);
-   // }
-   // for(i=0;i<num_readers;i++){
-   //    pthread_join(readers_thread[i],NULL);
-   // }
+   for(i=0;i<num_writers;i++){
+      pthread_join(writers_thread[i],NULL);
+   }
+   for(i=0;i<num_readers;i++){
+      pthread_join(readers_thread[i],NULL);
+   }
 
-   // pthread_exit(NULL);
+   pthread_exit(NULL);
    return 0;
 }
 
@@ -163,8 +158,20 @@ void* increment(void* parameter){
    int value = 0;
    int i;
    int k;
+   int n;
 
+      char sendline[1000];
+   char recvline[1000];
+   char buffer[1000];
    for(k=1;k<=cur_thread->iterations;k++){
+      printf("Writer connecting\n");
+            sendto(sockfd,sendline,strlen(sendline),0,
+             (struct sockaddr *)&servaddr,sizeof(servaddr));
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
+      printf("Writer Reicieved: %s\n", recvline);
+
       fp = fopen(cur_thread->filename,"rb+");
 
       for( i = 0; i < cur_thread->writers; i++){
@@ -192,8 +199,20 @@ void* readNumber(void* parameter){
    char temp[sizeof(int)];
    int i;
    int k;
+   int n;
 
+         char sendline[1000];
+   char recvline[1000];
+   char buffer[1000];
    for(k=1;k<=cur_thread->iterations;k++){
+       printf("Reader connecting\n");
+            sendto(sockfd,sendline,strlen(sendline),0,
+             (struct sockaddr *)&servaddr,sizeof(servaddr));
+      n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+      recvline[n]=0;
+      fputs(recvline,stdout);
+      printf("Reader Reicieved: %s\n", recvline);
+
       strcpy(contents_string,"");
       fp = fopen(cur_thread->filename,"rb+");
       fread(contents, sizeof(int),cur_thread->writers, fp);

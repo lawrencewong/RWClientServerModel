@@ -163,7 +163,7 @@ void* increment(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,"w");
    strcat(sendline,"|");
-   strcat(sendline,cur->filename);
+   strcat(sendline,cur_thread->filename);
 
    for(k=1;k<=cur_thread->iterations;k++){
       printf("Writer connecting\n");
@@ -215,7 +215,7 @@ void* readNumber(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,"w");
    strcat(sendline,"|");
-   strcat(sendline,cur->filename);
+   strcat(sendline,cur_thread->filename);
    
    for(k=1;k<=cur_thread->iterations;k++){
        printf("Reader connecting\n");

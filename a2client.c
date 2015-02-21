@@ -99,15 +99,6 @@ int main(int argc, char**argv)
 
 
 
-   sprintf(sendline, "%d", 68); 
-   strcat(sendline,"|");
-   pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"w");
-   strcat(sendline,"|");
-   strcat(sendline,filename);
 
 
 
@@ -163,6 +154,17 @@ void* increment(void* parameter){
       char sendline[1000];
    char recvline[1000];
    char buffer[1000];
+
+      sprintf(sendline, "%d", 68); 
+   strcat(sendline,"|");
+   pid_t pid = getpid();
+   sprintf(buffer, "%d", pid);
+   strcat(sendline,buffer);
+   strcat(sendline,"|");
+   strcat(sendline,"w");
+   strcat(sendline,"|");
+   strcat(sendline,cur->filename);
+
    for(k=1;k<=cur_thread->iterations;k++){
       printf("Writer connecting\n");
             sendto(sockfd,sendline,strlen(sendline),0,
@@ -204,6 +206,17 @@ void* readNumber(void* parameter){
          char sendline[1000];
    char recvline[1000];
    char buffer[1000];
+
+         sprintf(sendline, "%d", 68); 
+   strcat(sendline,"|");
+   pid_t pid = getpid();
+   sprintf(buffer, "%d", pid);
+   strcat(sendline,buffer);
+   strcat(sendline,"|");
+   strcat(sendline,"w");
+   strcat(sendline,"|");
+   strcat(sendline,cur->filename);
+   
    for(k=1;k<=cur_thread->iterations;k++){
        printf("Reader connecting\n");
             sendto(sockfd,sendline,strlen(sendline),0,

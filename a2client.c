@@ -167,22 +167,24 @@ void* increment(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
 
-   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
-   bzero(&servaddr,sizeof(servaddr));
-   servaddr.sin_family = AF_INET;
-   servaddr.sin_addr.s_addr=inet_addr(cur_thread->dest);
-   servaddr.sin_port=htons(32000);
-
-
-
-   sendto(sockfd,sendline, 10000,0,
-    (struct sockaddr *)&servaddr,sizeof(servaddr));
-   n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
-   recvline[n]=0;
-   fputs(recvline,stdout);
 
    for(k=1;k<=cur_thread->iterations;k++){
+         printf("Connecting\n");
+         sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+         bzero(&servaddr,sizeof(servaddr));
+         servaddr.sin_family = AF_INET;
+         servaddr.sin_addr.s_addr=inet_addr(cur_thread->dest);
+         servaddr.sin_port=htons(32000);
+
+
+
+         sendto(sockfd,sendline, 10000,0,
+          (struct sockaddr *)&servaddr,sizeof(servaddr));
+         n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
+         recvline[n]=0;
+         fputs(recvline,stdout);
 
       fp = fopen(cur_thread->filename,"rb+");
 

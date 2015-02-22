@@ -116,19 +116,10 @@ void addToClientQueue(int pid, char requestType, int index){
       temp->requestType = requestType;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
-
-      printf("BEFORE\n");
       while(current->next != NULL){
-         printf("TEST1: %d\n", current->pid);
-         printf("TEST2: %c\n", current->requestType);
          current = current->next;
-         printf("AFTER ASSINGMENT\n");
       }
-      printf("AFTER\n");
-      printf("NEXT-> = temp\n");
       current->next = temp;
       temp->next = NULL;
-
-
    }
 }

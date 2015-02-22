@@ -79,9 +79,7 @@ int main(int argc, char**argv)
          }
       }
       for(i=0;i<MAX_CLIENTS;i++){
-         if(clientQueues[i] != NULL){
             printf("QUEUE CHECK PID: %d\n", clientQueues[i].pid);
-         }
       }
 
       printf("-------------------------------------------------------\n");

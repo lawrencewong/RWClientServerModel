@@ -122,6 +122,7 @@ void addToClientQueue(int pid, char requestType, int index){
          printf("TEST1: %d\n", current->pid);
          printf("TEST2: %c\n", current->requestType);
          current = current->next;
+         printf("AFTER ASSINGMENT\n");
       }
       printf("AFTER\n");
       printf("NEXT-> = temp\n");

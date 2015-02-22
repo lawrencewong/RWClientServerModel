@@ -11,7 +11,6 @@ typedef struct {
 typedef struct{
 	int pid;
 	char requestType;
-	int length;
 	struct ticketNode * head;
 	struct ticketNode * next;
 } ticketNode;

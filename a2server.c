@@ -38,7 +38,6 @@ int main(int argc, char**argv)
       clientQueues[i] = malloc(sizeof(ticketNode));
       clientQueues[i]->pid = 0;
       clientQueues[i]->requestType = '\0';
-      clientQueues[i]->length = 0;
       clientQueues[i]->head = NULL;
       clientQueues[i]->next = NULL;
    }
@@ -98,7 +97,6 @@ int main(int argc, char**argv)
 void startClientQueue(int pid, char requestType, int index){
    clientQueues[index]->pid = pid;
    clientQueues[index]->requestType = requestType;
-   clientQueues[index]->length = 1;
    clientQueues[index]->head = malloc(sizeof(ticketNode));
    clientQueues[index]->head = NULL;
    clientQueues[index]->next = malloc(sizeof(ticketNode));
@@ -106,17 +104,24 @@ void startClientQueue(int pid, char requestType, int index){
 }
 
 void addToClientQueue(int pid, char requestType, int index){
-   if(clientQueues[index]->length = 0){
+   if(clientQueues[index]->pid = 0){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
-      clientQueues[index]->length = 1;
       clientQueues[index]->next = NULL;
    }else{
       ticketNode * temp;
       ticketNode * current;
       temp = malloc(sizeof(ticketNode));
+      temp->pid = pid;
+      temp->requestType = requestType;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
+
+      while(current->next != NULL){
+         current = current->next;
+      }
+      current->next = temp;
+      temp->next = NULL;
 
    }
 }

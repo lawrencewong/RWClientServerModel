@@ -25,4 +25,4 @@ void* readNumber(void* parameter);
 //
 void startClientQueue(int pid, char requestType, int index);
 //
-void addToClientQueue(int pid, char requestType, int index)
+void addToClientQueue(int pid, char requestType, int index);

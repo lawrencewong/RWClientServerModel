@@ -1,5 +1,5 @@
 // Information for each thread, including the thread's lock and all of the reader's locks
-typedef struct {
+typedef struct thread_data{
 	int thread_id;
 	int iterations;
 	int writers;
@@ -8,7 +8,7 @@ typedef struct {
 	char * dest;
 } thread_data;
 
-typedef struct{
+typedef struct ticketNode{
 	int pid;
 	char requestType;
 	struct ticketNode * head;

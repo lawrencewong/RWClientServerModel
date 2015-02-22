@@ -106,17 +106,17 @@ void startClientQueue(int pid, char requestType, int index){
 }
 
 void addToClientQueue(int pid, char requestType, int index){
-   if(clientQueues[index].length = 0){
-      clientQueues[index].pid = pid;
-      clientQueues[index].requestType = requestType;
-      clientQueues[index].length = 1;
-      clientQueues[index].next = NULL;
+   if(clientQueues[index]->length = 0){
+      clientQueues[index]->pid = pid;
+      clientQueues[index]->equestType = requestType;
+      clientQueues[index]->length = 1;
+      clientQueues[index]->next = NULL;
    }else{
       ticketNode * temp;
       ticketNode * current;
       temp = malloc(sizeof(ticketNode));
-      surrent = malloc(sizeof(ticketNode));
-      current = &clientQueues[index];
+      current = malloc(sizeof(ticketNode));
+      current = clientQueues[index];
 
    }
 }

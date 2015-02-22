@@ -104,7 +104,7 @@ void startClientQueue(int pid, char requestType, int index){
 }
 
 void addToClientQueue(int pid, char requestType, int index){
-   if(clientQueues[index]->pid = 0){
+   if(clientQueues[index]->pid == 0){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
       clientQueues[index]->next = NULL;

@@ -14,7 +14,7 @@
 
 #define MAX_CLIENTS 10
 
-ticketNode clientQueues[10];
+ticketNode * clientQueues[10];
 
 int main(int argc, char**argv)
 {
@@ -33,7 +33,15 @@ int main(int argc, char**argv)
    
 
 
-   
+   for (i = 0; i < MAX_CLIENTS; i++)
+   {
+      clientQueues[i] = malloc(sizeof(ticketNode));
+      clientQueues[i]->pid = 0;
+      clientQueues[i]->requestType = NULL;
+      clientQueues[i]->length = 0;
+      clientQueues[i]->head = NULL;
+      clientQueues[i]->next = NULL;
+   }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    bzero(&servaddr,sizeof(servaddr));
@@ -71,10 +79,11 @@ int main(int argc, char**argv)
          if(clientGroups[i] == 0){
             clientGroups[i] = pid;
             printf("New Client\n");
-            startClientQueue(pid, requestType, i);
+            // startClientQueue(pid, requestType, i);
             break;
          }else if(clientGroups[i] == pid){
             printf("Already have seen this client\n");
+
             break;
          }
       }
@@ -86,11 +95,28 @@ int main(int argc, char**argv)
    }
 }
 
-void startClientQueue(int pid, char requestType, int index){
-   clientQueues[index].pid = pid;
-   clientQueues[index].requestType = requestType;
-   clientQueues[index].head = malloc(sizeof(ticketNode));
-   clientQueues[index].head = NULL;
-   clientQueues[index].ahead = malloc(sizeof(ticketNode));
-   clientQueues[index].ahead = NULL;
-}
+// void startClientQueue(int pid, char requestType, int index){
+//    clientQueues[index].pid = pid;
+//    clientQueues[index].requestType = requestType;
+//    clientQueues[index].length = 1;
+//    clientQueues[index].head = malloc(sizeof(ticketNode));
+//    clientQueues[index].head = NULL;
+//    clientQueues[index].next = malloc(sizeof(ticketNode));
+//    clientQueues[index].next = NULL;
+// }
+
+// void addToClientQueue(int pid, char requestType, int index){
+//    if(clientQueues[index].pid = 0){
+//       clientQueues[index].pid = pid;
+//       clientQueues[index].requestType = requestType;
+//       clientQueues[index].length = 1;
+//       clientQueues[index].next = NULL;
+//    }else{
+//       ticketNode * temp = malloc(sizeof(ticketNode));
+//       temp->pid = pid;
+//       temp->requestType = requestType;
+//       temp->length = clientQueues[i].length++;
+
+
+//    }
+// }

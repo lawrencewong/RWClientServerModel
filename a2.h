@@ -11,8 +11,10 @@ typedef struct {
 typedef struct{
 	int pid;
 	char requestType;
+	int length;
 	struct ticketNode * head;
-	struct ticketNode * ahead;
+	struct ticketNode * previous;
+	struct ticketNode * next;
 } ticketNode;
 
 // initializeFile function sets up the binary file based on how many writer threads there will be.

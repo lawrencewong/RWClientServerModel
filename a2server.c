@@ -55,7 +55,7 @@ int main(int argc, char**argv)
       printf("Waiting\n");
       len = sizeof(cliaddr);
       n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);
-      sendto(sockfd,"BACK",n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       

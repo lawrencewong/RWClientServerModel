@@ -37,7 +37,7 @@ int main(int argc, char**argv)
    {
       clientQueues[i] = malloc(sizeof(ticketNode));
       clientQueues[i]->pid = 0;
-      clientQueues[i]->requestType = NULL;
+      clientQueues[i]->requestType = '';
       clientQueues[i]->length = 0;
       clientQueues[i]->head = NULL;
       clientQueues[i]->next = NULL;

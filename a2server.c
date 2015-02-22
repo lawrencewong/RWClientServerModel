@@ -87,9 +87,9 @@ int main(int argc, char**argv)
             break;
          }
       }
-      for(i=0;i<MAX_CLIENTS;i++){
-            printf("QUEUE CHECK PID: %d\n", clientQueues[i].pid);
-      }
+      // for(i=0;i<MAX_CLIENTS;i++){
+      //       printf("QUEUE CHECK PID: %d\n", clientQueues[i].pid);
+      // }
 
       printf("-------------------------------------------------------\n");
    }

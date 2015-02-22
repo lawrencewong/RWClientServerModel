@@ -41,7 +41,6 @@ int main(int argc, char**argv)
       clientQueues[i]->length = 0;
       clientQueues[i]->head = NULL;
       clientQueues[i]->next = NULL;
-      clientQueues[i]->tail = NULL;
    }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -84,7 +83,7 @@ int main(int argc, char**argv)
             break;
          }else if(clientGroups[i] == pid){
             printf("Already have seen this client\n");
-
+            addToClientQueue(pid, requestType, i);
             break;
          }
       }
@@ -104,22 +103,20 @@ void startClientQueue(int pid, char requestType, int index){
    clientQueues[index]->head = NULL;
    clientQueues[index]->next = malloc(sizeof(ticketNode));
    clientQueues[index]->next = NULL;
-   clientQueues[index]->tail = malloc(sizeof(ticketNode));
-   clientQueues[index]->tail = NULL;
 }
 
-// void addToClientQueue(int pid, char requestType, int index){
-//    if(clientQueues[index].pid = 0){
-//       clientQueues[index].pid = pid;
-//       clientQueues[index].requestType = requestType;
-//       clientQueues[index].length = 1;
-//       clientQueues[index].next = NULL;
-//    }else{
-//       ticketNode * temp = malloc(sizeof(ticketNode));
-//       temp->pid = pid;
-//       temp->requestType = requestType;
-//       temp->length = clientQueues[i].length++;
+void addToClientQueue(int pid, char requestType, int index){
+   if(clientQueues[index].length = 0){
+      clientQueues[index].pid = pid;
+      clientQueues[index].requestType = requestType;
+      clientQueues[index].length = 1;
+      clientQueues[index].next = NULL;
+   }else{
+      ticketNode * temp;
+      ticketNode * current;
+      temp = malloc(sizeof(ticketNode));
+      surrent = malloc(sizeof(ticketNode));
+      current = &clientQueues[index];
 
-
-//    }
-// }
+   }
+}

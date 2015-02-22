@@ -14,7 +14,6 @@ typedef struct{
 	int length;
 	struct ticketNode * head;
 	struct ticketNode * next;
-	struct ticketNode * tail;
 } ticketNode;
 
 // initializeFile function sets up the binary file based on how many writer threads there will be.
@@ -25,3 +24,5 @@ void* increment(void* parameter);
 void* readNumber(void* parameter);
 //
 void startClientQueue(int pid, char requestType, int index);
+//
+void addToClientQueue(int pid, char requestType, int index)

@@ -117,10 +117,10 @@ void addToClientQueue(int pid, char requestType, int index){
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
 
-      while(current->next != NULL){
-         &current = current->next;
+      while(current->next == NULL){
+         current = current.next;
       }
-      &current->next = temp;
+      current.next = temp;
       temp->next = NULL;
 
    }

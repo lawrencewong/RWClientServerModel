@@ -160,8 +160,10 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int th
 
 void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
    if(clientQueues[index] == NULL){
+      clientQueues[index] = malloc(sizeof(ticketNode));
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
+      clientQueues[index]->next = malloc(sizeof(ticketNode));
       clientQueues[index]->next = NULL;
       clientQueues[index]->socketFD= socketFD;
       clientQueues[index]->thread_id= thread_id;

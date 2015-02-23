@@ -153,7 +153,7 @@ void* increment(void* parameter){
       strcat(sendline,"|");
       strcat(sendline,cur_thread->filename);
       strcat(sendline,"|");
-      sprintf(buffer,"%d",cur_thread->thread_id);
+      sprintf(buffer,"%d",cur_thread->thread_id+1);
       strcat(sendline,buffer);
       strcat(sendline,"|");
       sprintf(buffer,"%d",k);
@@ -165,11 +165,11 @@ void* increment(void* parameter){
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
             // printf("Writer: %d COnnected SENT: %s\n",cur_thread->thread_id, sendline);
-            printf("Writer: %d COnnected \n",cur_thread->thread_id);
+            printf("Writer: %d COnnected \n",cur_thread->thread_id+1);
       // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Writer: %d Reicieved: %s\n", cur_thread->thread_id, recvline);
+      printf("Writer: %d Reicieved: %s\n", cur_thread->thread_id+1, recvline);
 
       if( strcmp("AWK", recvline) == 0){
 
@@ -187,7 +187,7 @@ void* increment(void* parameter){
          }
          fclose(fp);
          sleep(rand()%5);
-         printf("Writer: %d Done writing. Now sending relase\n", cur_thread->thread_id);
+         printf("Writer: %d Done writing. Now sending relase\n", cur_thread->thread_id+1);
          //RELEASE
          strcpy(sendline, "");
          sprintf(buffer, "%d", pid);
@@ -197,7 +197,7 @@ void* increment(void* parameter){
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
          strcat(sendline,"|");
-         sprintf(buffer,"%d",cur_thread->thread_id);
+         sprintf(buffer,"%d",cur_thread->thread_id+1);
          strcat(sendline,buffer);
          strcat(sendline,"|");
          sprintf(buffer,"%d",k);
@@ -206,7 +206,7 @@ void* increment(void* parameter){
          strcat(sendline,"O");
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("Writer: %d done release\n", cur_thread->thread_id);
+         printf("Writer: %d done release\n", cur_thread->thread_id+1);
          // printf("Writer: %d done release sent: %s \n", cur_thread->thread_id, sendline);
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
@@ -247,7 +247,7 @@ void* readNumber(void* parameter){
       strcat(sendline,"|");
       strcat(sendline,cur_thread->filename);
       strcat(sendline,"|");
-      sprintf(buffer,"%d",cur_thread->thread_id);
+      sprintf(buffer,"%d",cur_thread->thread_id+1);
       strcat(sendline,buffer);
       strcat(sendline,"|");
       sprintf(buffer,"%d",k);
@@ -257,11 +257,11 @@ void* readNumber(void* parameter){
        
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Reader: %d COnnected\n", cur_thread->thread_id);
+            printf("Reader: %d COnnected\n", cur_thread->thread_id+1);
             // printf("Reader: %d COnnected SENT %s\n", cur_thread->thread_id, sendline);
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Reader: %d Reicieved: %s\n", cur_thread->thread_id,recvline);
+      printf("Reader: %d Reicieved: %s\n", cur_thread->thread_id+1,recvline);
 
       if( strcmp("AWK", recvline) == 0){
 
@@ -278,7 +278,7 @@ void* readNumber(void* parameter){
          fflush(stdout);
          sleep(rand()%5);
 
-         printf("Sending release from reader: %d\n", cur_thread->thread_id);
+         printf("Sending release from reader: %d\n", cur_thread->thread_id+1);
          //RELEASE
          strcpy(sendline, "");
          sprintf(buffer, "%d", pid);
@@ -288,7 +288,7 @@ void* readNumber(void* parameter){
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
          strcat(sendline,"|");
-         sprintf(buffer,"%d",cur_thread->thread_id);
+         sprintf(buffer,"%d",cur_thread->thread_id+1);
          strcat(sendline,buffer);
          strcat(sendline,"|");
          sprintf(buffer,"%d",k);
@@ -297,7 +297,7 @@ void* readNumber(void* parameter){
          strcat(sendline,"O");
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("release sent from reader : %d \n", cur_thread->thread_id);
+         printf("release sent from reader : %d \n", cur_thread->thread_id+1);
          // printf("release sent from reader : %d SENT %s \n", cur_thread->thread_id, sendline);
          
       }else{

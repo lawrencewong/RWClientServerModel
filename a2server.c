@@ -138,6 +138,7 @@ int main(int argc, char**argv)
       }else if(release == 'O'){ /// RELEASE
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
+               printf("REKEASE FROM : %d\n", pid);
                releaseClientQueue(i,pid, requestType, release);
             }
             break;

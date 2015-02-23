@@ -196,14 +196,29 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
 
 }
 
-// MAKE POP OFF FUNCTION
+
 void runProcess(int index, ticketNode * ticketToRun){
 
    printf("ticketToRun DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration);
-   sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   
+   // RUN WRITER
+   if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
+      clientGroups[index].activeWriter = 1;
+      clientQueues[index] = ticketToRun->next;
+      free(ticketToRun);
+      sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter = 0){
+      clientGroups[index].numActiveReaders++;
+      clientQueues[index] = ticketToRun->next;
+      free(ticketToRun);
+      sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   }
+   // Run Reader
+   
 
 }
 
+// MAKE POP OFF FUNCTION
 void releaseClientQueue(int index){
    // Writer
    // if(clientGroups[index].numActiveReaders == 0){

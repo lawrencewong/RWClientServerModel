@@ -202,7 +202,7 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
 
 void runProcess(int index, ticketNode * ticketToRun){
 
-   printf("ticketToRun DATA: PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration, clientQueues[index].activeWriters, clientQueues[index].numActiveReaders);
+   printf("ticketToRun DATA: PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
    
    // RUN WRITER
    if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
@@ -240,7 +240,7 @@ void runProcess(int index, ticketNode * ticketToRun){
 void releaseClientQueue(int index, int pid, char requestType, char release){
    // Writer
 
-   printf("GOT RELEASE FROM: PID: %d RT: %c RELEASE: %c WF: %d NR: %d\n", pid, requestType, release, clientQueues[index].activeWriters, clientQueues[index].numActiveReaders);
+   printf("GOT RELEASE FROM: PID: %d RT: %c RELEASE: %c WF: %d NR: %d\n", pid, requestType, release, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
    if(requestType == 'w' && release == 'O'){
 
 

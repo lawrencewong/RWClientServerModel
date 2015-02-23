@@ -140,17 +140,17 @@ void* increment(void* parameter){
    char buffer[1000];
 
    pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"w");
-   strcat(sendline,"|");
-   strcat(sendline,cur_thread->filename);
 
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
+      sprintf(buffer, "%d", pid);
+      strcat(sendline,buffer);
+      strcat(sendline,"|");
+      strcat(sendline,"w");
+      strcat(sendline,"|");
+      strcat(sendline,cur_thread->filename);
       strcat(sendline,"|");
       sprintf(buffer,"%d",cur_thread->thread_id);
       strcat(sendline,buffer);
@@ -186,7 +186,6 @@ void* increment(void* parameter){
          printf("Writer: %d Done writing. Now sending relase\n", cur_thread->thread_id);
          //RELEASE
          strcpy(sendline, "");
-         pid_t pid = getpid();
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
          strcat(sendline,"|");
@@ -226,18 +225,19 @@ void* readNumber(void* parameter){
    char buffer[1000];
 
    pid_t pid = getpid();
-   sprintf(buffer, "%d", pid);
-   strcat(sendline,buffer);
-   strcat(sendline,"|");
-   strcat(sendline,"r");
-   strcat(sendline,"|");
-   strcat(sendline,cur_thread->filename);
+
 
    
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
+      sprintf(buffer, "%d", pid);
+      strcat(sendline,buffer);
+      strcat(sendline,"|");
+      strcat(sendline,"r");
+      strcat(sendline,"|");
+      strcat(sendline,cur_thread->filename);
       strcat(sendline,"|");
       sprintf(buffer,"%d",cur_thread->thread_id);
       strcat(sendline,buffer);
@@ -270,7 +270,6 @@ void* readNumber(void* parameter){
          printf("Sending release from reader: %d\n", cur_thread->thread_id);
          //RELEASE
          strcpy(sendline, "");
-         pid_t pid = getpid();
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
          strcat(sendline,"|");

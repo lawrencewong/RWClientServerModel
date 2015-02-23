@@ -251,7 +251,6 @@ void releaseClientQueue(int index, int pid, int requestType, int release){
          // DECREMENT READER 
       // DO ALL UNTIL WRITER
       clientGroups[index].numActiveReaders--;
-   }
    }else{ 
       printf("NOT SUPPOSED TO HAPPEN\n");
    }

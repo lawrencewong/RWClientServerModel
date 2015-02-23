@@ -15,6 +15,7 @@ typedef struct ticketNode{
 	int socketFD;
 	int thread_id;
 	int iteration;
+	struct sockaddr_in cliaddr;
 	struct ticketNode * head;
 	struct ticketNode * next;
 } ticketNode;

@@ -34,6 +34,7 @@ int main(int argc, char**argv)
    int i;
    int thread_id;
    int iteration;
+   struct sockaddr_in cliaddr;
    
 
 
@@ -51,6 +52,7 @@ int main(int argc, char**argv)
       clientQueues[i]->socketFD = 0;
       clientQueues[i]->thread_id = 0;
       clientQueues[i]->iteration = 0;
+      clientQueues[i]->cliaddr = NULL;
    }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -75,6 +77,7 @@ int main(int argc, char**argv)
    temp->next = NULL;
    temp->thread_id = 0;
    temp->iteration = 0;
+   temp->cliaddr = NULL;
 
       printf("Waiting\n");
       len = sizeof(cliaddr);
@@ -108,7 +111,7 @@ int main(int argc, char**argv)
 
             if(clientGroups[i].pid == pid){
                printf("Already have seen this client\n");
-               addToClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
+               addToClientQueue(pid, requestType, i, sockfd, thread_id, iteration, cliaddr);
                temp = clientQueues[i];
                //    while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
                //       temp = temp->next;
@@ -118,7 +121,7 @@ int main(int argc, char**argv)
             }else if(clientGroups[i].pid == 0){
                clientGroups[i].pid = pid;
                printf("New Client\n");
-               startClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
+               startClientQueue(pid, requestType, i, sockfd, thread_id, iteration, cliaddr);
                temp = clientQueues[i];
                // while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
                //       temp = temp->next;
@@ -146,7 +149,7 @@ int main(int argc, char**argv)
    }
 }
 
-void startClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
+void startClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration, struct sockaddr_in cliaddr){
    clientQueues[index]->pid = pid;
    clientQueues[index]->requestType = requestType;
    clientQueues[index]->head = malloc(sizeof(ticketNode));
@@ -156,10 +159,12 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int th
    clientQueues[index]->socketFD= socketFD;
    clientQueues[index]->thread_id= thread_id;
    clientQueues[index]->iteration= iteration;
+   clientQueues[index]->cliaddr = malloc(sizeof(struct sockaddr_in));
+   clientQueues[index]->cliaddr = cliaddr;
 
 }
 
-void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
+void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration, struct sockaddr_in cliaddr){
    if(clientQueues[index] == NULL){
       clientQueues[index] = malloc(sizeof(ticketNode));
       clientQueues[index]->pid = pid;
@@ -169,6 +174,8 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       clientQueues[index]->socketFD= socketFD;
       clientQueues[index]->thread_id= thread_id;
       clientQueues[index]->iteration= iteration;
+      clientQueues[index]->cliaddr = malloc(sizeof(struct sockaddr_in));
+      clientQueues[index]->cliaddr = cliaddr;
    }else{
       printf("ADDING TO QUEUE\n");
       ticketNode * temp;
@@ -179,6 +186,8 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       temp->socketFD = socketFD;
       temp->thread_id = thread_id;
       temp->iteration = iteration;
+      temp->cliaddr = malloc(sizeof(struct sockaddr_in));
+      temp->cliaddr = cliaddr;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
       while(current->next != NULL){
@@ -209,7 +218,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       printf("RUNNING WRITER\n");
       clientGroups[index].activeWriter = 1;
       
-      sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&clientQueues[index]->cliaddr,sizeof(clientQueues[index]->cliaddr));
       printf("SENDING AWK TO WRITER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
       printf("SENDING AWk TO WRITER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
@@ -227,7 +236,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       
       clientGroups[index].numActiveReaders++;
       
-      sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&clientQueues[index]->cliaddr,sizeof(clientQueues[index]->cliaddr));
       printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
       printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);

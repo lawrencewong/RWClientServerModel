@@ -191,10 +191,10 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
     current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
       while(current->next != NULL){
-         printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d\n",current->pid, current->requestType, current->thread_id, current->iteration);
+         printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d SOCKETFD: %d\n",current->pid, current->requestType, current->thread_id, current->iteration, current->socketFD);
          current = current->next;
       }
-      printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d\n",current->pid, current->requestType, current->thread_id, current->iteration);
+      printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d SOCKETFD:%d\n",current->pid, current->requestType, current->thread_id, current->iteration, current->socketFD);
 
 
 }

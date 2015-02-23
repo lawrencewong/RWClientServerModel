@@ -206,6 +206,7 @@ void runProcess(int index, ticketNode * ticketToRun){
    
    // RUN WRITER
    if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
+      printf("RUNNING WRITER\n");
       clientGroups[index].activeWriter = 1;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
@@ -220,6 +221,8 @@ void runProcess(int index, ticketNode * ticketToRun){
       
 
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
+      printf("RUNNING READER\n");
+      
       clientGroups[index].numActiveReaders++;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));

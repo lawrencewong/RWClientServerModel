@@ -28,6 +28,7 @@ int main(int argc, char**argv)
    const char delim[2] = "|";
    char * filename;
    char requestType;
+   char release;
    int clientID;
    int pid;
    int i;
@@ -96,11 +97,13 @@ int main(int argc, char**argv)
       thread_id = atoi(token);
       token = strtok(NULL, delim);
       iteration = atoi(token);
+      token = strtok(NULL, delim);
+      release = token[0];
 
-      printf("PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d\n", pid, requestType, filename, thread_id, iteration);
+      printf("PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d RELEASE %c\n", pid, requestType, filename, thread_id, iteration, release);
       
       // REQUEST
-      if(requestType == 'r' || requestType == 'w'){
+      if((requestType == 'r' || requestType == 'w')&& release == 'X'){
          for(i=0;i<MAX_CLIENTS;i++){
 
             if(clientGroups[i].pid == pid){
@@ -130,11 +133,11 @@ int main(int argc, char**argv)
          // for(i=0;i<MAX_CLIENTS;i++){
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
          // }
-      }else if(requestType == 'x'){ /// RELEASE
+      }else if(release == 'O'){ /// RELEASE
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
                if(clientGroups[i].activeWriter == 0){ // ONLY RELEASE WHEN WRITERS ARE DONE
-                  releaseClientQueue(i);
+                  releaseClientQueue(i,pid, requestType, release);
                }
             }
             break;
@@ -236,7 +239,7 @@ void runProcess(int index, ticketNode * ticketToRun){
 }
 
 // MAKE POP OFF FUNCTION
-void releaseClientQueue(int index){
+void releaseClientQueue(int index, int pid, int requestType, int release){
    // Writer
    // if(clientGroups[index].numActiveReaders == 0){
 

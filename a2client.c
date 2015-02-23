@@ -158,6 +158,8 @@ void* increment(void* parameter){
       strcat(sendline,"|");
       sprintf(buffer,"%d",k);
       strcat(sendline,buffer);
+      strcat(sendline,"|");
+      strcat(sendline,"X");
       
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
@@ -191,7 +193,7 @@ void* increment(void* parameter){
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
          strcat(sendline,"|");
-         strcat(sendline,"x");
+         strcat(sendline,"w");
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
          strcat(sendline,"|");
@@ -200,6 +202,8 @@ void* increment(void* parameter){
          strcat(sendline,"|");
          sprintf(buffer,"%d",k);
          strcat(sendline,buffer);
+         strcat(sendline,"|");
+         strcat(sendline,"O");
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
          printf("Writer: %d done release\n", cur_thread->thread_id);
@@ -248,6 +252,8 @@ void* readNumber(void* parameter){
       strcat(sendline,"|");
       sprintf(buffer,"%d",k);
       strcat(sendline,buffer);
+      strcat(sendline,"|");
+      strcat(sendline,"X");
        
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
@@ -278,7 +284,7 @@ void* readNumber(void* parameter){
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
          strcat(sendline,"|");
-         strcat(sendline,"x");
+         strcat(sendline,"r");
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
          strcat(sendline,"|");
@@ -287,6 +293,8 @@ void* readNumber(void* parameter){
          strcat(sendline,"|");
          sprintf(buffer,"%d",k);
          strcat(sendline,buffer);
+         strcat(sendline,"|");
+         strcat(sendline,"O");
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
          printf("release sent from reader : %d n", cur_thread->thread_id);

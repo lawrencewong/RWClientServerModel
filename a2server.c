@@ -136,6 +136,7 @@ int main(int argc, char**argv)
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
          // }
       }else if(release == 'O'){ /// RELEASE
+          printf("REKEASE FROM BEFORE : %d\n", pid);
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
                printf("REKEASE FROM : %d\n", pid);

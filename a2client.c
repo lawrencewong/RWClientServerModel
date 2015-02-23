@@ -139,8 +139,6 @@ void* increment(void* parameter){
    char recvline[1000];
    char buffer[1000];
 
-   sprintf(sendline, "%d", 68); 
-   strcat(sendline,"|");
    pid_t pid = getpid();
    sprintf(buffer, "%d", pid);
    strcat(sendline,buffer);
@@ -179,8 +177,6 @@ void* increment(void* parameter){
          sleep(rand()%5);
          //RELEASE
          strcpy(sendline, "");
-         sprintf(sendline, "%d", 68); 
-         strcat(sendline,"|");
          pid_t pid = getpid();
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
@@ -213,8 +209,6 @@ void* readNumber(void* parameter){
    char recvline[1000];
    char buffer[1000];
 
-   sprintf(sendline, "%d", 68); 
-   strcat(sendline,"|");
    pid_t pid = getpid();
    sprintf(buffer, "%d", pid);
    strcat(sendline,buffer);
@@ -248,7 +242,17 @@ void* readNumber(void* parameter){
          fflush(stdout);
          sleep(rand()%5);
 
-
+         //RELEASE
+         strcpy(sendline, "");
+         pid_t pid = getpid();
+         sprintf(buffer, "%d", pid);
+         strcat(sendline,buffer);
+         strcat(sendline,"|");
+         strcat(sendline,"x");
+         strcat(sendline,"|");
+         strcat(sendline,cur_thread->filename);
+         sendto(sockfd,sendline,strlen(sendline),0,
+             (struct sockaddr *)&servaddr,sizeof(servaddr));
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }

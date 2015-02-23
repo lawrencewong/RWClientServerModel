@@ -67,16 +67,14 @@ int main(int argc, char**argv)
 
       printf("CLient ID: %s\n",mesg);
       token = strtok(mesg, delim);
-      clientID = atoi(token);
-      token = strtok(NULL, delim);
-      pid = atoi(token);
+      pid = atoi(mesg);
       token = strtok(NULL, delim);
       requestType = token[0];
       token = strtok(NULL, delim);
       filename = malloc(sizeof(token));
       filename = token;
 
-      printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
+      printf("PID: %d RT: %c FILE: %s\n", pid, requestType, filename);
       
       // REQUEST
       if(requestType == 'r' || requestType == 'w'){

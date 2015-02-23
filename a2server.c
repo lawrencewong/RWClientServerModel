@@ -55,7 +55,7 @@ int main(int argc, char**argv)
       printf("Waiting\n");
       len = sizeof(cliaddr);
       n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);
-      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      
       printf("-------------------------------------------------------\n");
       mesg[n] = 0;
       
@@ -89,6 +89,9 @@ int main(int argc, char**argv)
                break;
             }
          }
+         sendto(sockfd,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+
+
          for(i=0;i<MAX_CLIENTS;i++){
                printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
          }

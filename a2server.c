@@ -59,7 +59,11 @@ int main(int argc, char**argv)
    servaddr.sin_port=htons(32000);
    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
 
-   ticketNode * temp;
+   
+
+   while(1)
+   {
+      ticketNode * temp;
    temp = malloc(sizeof(ticketNode));
    temp->pid = 0;
    temp->requestType = '\0';
@@ -71,9 +75,6 @@ int main(int argc, char**argv)
    temp->thread_id = 0;
    temp->iteration = 0;
 
-
-   while(1)
-   {
       printf("Waiting\n");
       len = sizeof(cliaddr);
       n = recvfrom(sockfd,mesg,1000,0,(struct sockaddr *)&cliaddr,&len);

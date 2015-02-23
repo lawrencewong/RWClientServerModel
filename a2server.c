@@ -159,7 +159,7 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int th
 }
 
 void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
-   if(clientQueues[index]->pid == 0){
+   if(cclientQueues[index] == NULL){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
       clientQueues[index]->next = NULL;

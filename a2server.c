@@ -191,6 +191,7 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
          printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d\n",current->pid, current->requestType, current->thread_id, current->iteration);
          current = current->next;
       }
+      printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d\n",current->pid, current->requestType, current->thread_id, current->iteration);
 
 
 }

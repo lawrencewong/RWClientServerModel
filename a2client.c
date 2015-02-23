@@ -145,6 +145,7 @@ void* increment(void* parameter){
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
+      strcpy(sendline, "");
       sprintf(buffer, "%d", pid);
       strcat(sendline,buffer);
       strcat(sendline,"|");
@@ -232,6 +233,7 @@ void* readNumber(void* parameter){
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
+      strcpy(sendline, "");
       sprintf(buffer, "%d", pid);
       strcat(sendline,buffer);
       strcat(sendline,"|");

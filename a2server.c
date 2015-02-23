@@ -149,8 +149,8 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD){
 
 // MAKE POP OFF FUNCTION
 void runProcess(int index){
-   
-   sendto(clientQueues[index].socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+
+   sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
 
 }
 

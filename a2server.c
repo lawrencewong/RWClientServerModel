@@ -255,12 +255,7 @@ void releaseClientQueue(int index, int pid, int requestType, int release){
       printf("NOT SUPPOSED TO HAPPEN\n");
    }
 
-   // ticketNode * current;
-   // current = malloc(sizeof(ticketNode));
-   // current = clientQueues[index];
-
-   // while(current->requestType == 'r'){
-   //    sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-   //    current = current->next;
-   // }
+   // CHECK QUEUE FOR READERS
+   // IF Next one is writer set flags and stop search let it run
+   // IF READER, let is run until you hit null or rwriter
 }

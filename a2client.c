@@ -154,11 +154,11 @@ void* increment(void* parameter){
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Writer COnnected\n");
+            printf("Writer: %d COnnected\n",cur_thread->thread_id);
       // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Writer Reicieved: %s\n", recvline);
+      printf("Writer: %d Reicieved: %s\n", cur_thread->thread_id, recvline);
 
       if( strcmp("AWK", recvline) == 0){
 
@@ -176,6 +176,7 @@ void* increment(void* parameter){
          }
          fclose(fp);
          sleep(rand()%5);
+         printf("Writer: %d Done writing. Now sending relase\n", cur_thread->thread_id);
          //RELEASE
          strcpy(sendline, "");
          pid_t pid = getpid();
@@ -187,6 +188,7 @@ void* increment(void* parameter){
          strcat(sendline,cur_thread->filename);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
+         printf("Writer: %d done release \n", cur_thread->thread_id);
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
@@ -225,10 +227,10 @@ void* readNumber(void* parameter){
        
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Reader COnnected\n");
+            printf("Reader: %d COnnected\n", cur_thread->thread_id);
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Reader Reicieved: %s\n", recvline);
+      printf("Reader: %d Reicieved: %s\n", cur_thread->thread_id,recvline);
 
       if( strcmp("AWK", recvline) == 0){
 
@@ -245,6 +247,7 @@ void* readNumber(void* parameter){
          fflush(stdout);
          sleep(rand()%5);
 
+         printf("Sending release from reader: %d\n", cur_thread->thread_id);
          //RELEASE
          strcpy(sendline, "");
          pid_t pid = getpid();
@@ -256,6 +259,7 @@ void* readNumber(void* parameter){
          strcat(sendline,cur_thread->filename);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
+         printf("release sent from reader : %d \n", cur_thread->thread_id);
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }

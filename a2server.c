@@ -55,6 +55,16 @@ int main(int argc, char**argv)
    servaddr.sin_port=htons(32000);
    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
 
+   ticketNode * temp;
+   temp = malloc(sizeof(ticketNode));
+   temp.pid = 0;
+   temp.requestType = '\0'
+   temp.socketFD = 0;
+   temp.head = malloc(sizeof(ticketNode));
+   temp.head = NULL;
+   temp.next = malloc(sizeof(ticketNode));
+   temp.next = NULL;
+
 
    while(1)
    {

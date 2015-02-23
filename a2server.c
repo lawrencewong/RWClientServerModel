@@ -117,7 +117,7 @@ int main(int argc, char**argv)
                printf("New Client\n");
                startClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
                temp = clientQueues[i];
-                  while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
+               while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
                      temp = temp->next;
                }
                runProcess(i, temp);
@@ -167,6 +167,7 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       clientQueues[index]->thread_id= thread_id;
       clientQueues[index]->iteration= iteration;
    }else{
+      printf("ADDING TO QUEUE\n");
       ticketNode * temp;
       ticketNode * current;
       temp = malloc(sizeof(ticketNode));
@@ -183,6 +184,15 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       current->next = temp;
       temp->next = NULL;
    }
+    ticketNode * current;
+    current = malloc(sizeof(ticketNode));
+      current = clientQueues[index];
+      while(current->next != NULL){
+         printf("QUEUE: PID: %d RT: %c THREAD: %d ITERATION: %d\n",current->pid, current->requestType, current->thread_id, current->iteration);
+         current = current->next;
+      }
+
+
 }
 
 // MAKE POP OFF FUNCTION

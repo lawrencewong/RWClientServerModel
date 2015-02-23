@@ -208,7 +208,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
-         clientQueues[index] = NULL
+         clientQueues[index] = NULL;
       }else{
          clientQueues[index] = clientQueues[index]->next;
       }
@@ -221,7 +221,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
-         clientQueues[index] = NULL
+         clientQueues[index] = NULL;
       }else{
          clientQueues[index] = clientQueues[index]->next;
       }

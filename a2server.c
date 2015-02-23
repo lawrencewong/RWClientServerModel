@@ -107,9 +107,9 @@ int main(int argc, char**argv)
                printf("Already have seen this client\n");
                addToClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
                temp = clientQueues[i];
-                  while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
-                     temp = temp->next;
-               }
+               //    while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
+               //       temp = temp->next;
+               // }
                runProcess(i, temp);
                break;
             }else if(clientGroups[i].pid == 0){
@@ -117,9 +117,9 @@ int main(int argc, char**argv)
                printf("New Client\n");
                startClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
                temp = clientQueues[i];
-               while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
-                     temp = temp->next;
-               }
+               // while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
+               //       temp = temp->next;
+               // }
                runProcess(i, temp);
                break;
             }
@@ -204,11 +204,11 @@ void runProcess(int index, ticketNode * ticketToRun){
    // RUN WRITER
    if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
       clientGroups[index].activeWriter = 1;
-      // clientQueues[index] = ticketToRun->next;
+      clientQueues[index] = ticketToRun->next;
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
       clientGroups[index].numActiveReaders++;
-      // clientQueues[index] = ticketToRun->next;
+      clientQueues[index] = ticketToRun->next;
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
    }
    // Run Reader

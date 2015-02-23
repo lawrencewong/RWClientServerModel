@@ -52,7 +52,6 @@ int main(int argc, char**argv)
       clientQueues[i]->socketFD = 0;
       clientQueues[i]->thread_id = 0;
       clientQueues[i]->iteration = 0;
-      clientQueues[i]->cliaddr = NULL;
    }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -77,7 +76,6 @@ int main(int argc, char**argv)
    temp->next = NULL;
    temp->thread_id = 0;
    temp->iteration = 0;
-   temp->cliaddr = NULL;
 
       printf("Waiting\n");
       len = sizeof(cliaddr);

@@ -6,6 +6,7 @@ typedef struct thread_data{
 	int readers;
 	char * filename;
 	char * dest;
+	struct sockaddr_in servaddr;
 } thread_data;
 
 typedef struct ticketNode{

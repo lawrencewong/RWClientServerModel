@@ -12,8 +12,7 @@
 #include <pthread.h>
 #include "a2.h"
 
-int sockfd;
-struct sockaddr_in servaddr,cliaddr;
+struct sockaddr_in servaddr;
 
 
 int main(int argc, char**argv)
@@ -29,18 +28,18 @@ int main(int argc, char**argv)
 
 
 
-   sockfd=socket(AF_INET,SOCK_DGRAM,0);
+   if (argc != 2)
+   {
+      printf("usage:  udpcli <IP address>\n");
+      exit(1);
+   }
 
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=inet_addr(argv[1]);
    servaddr.sin_port=htons(32000);
 
-   if (argc != 2)
-   {
-      printf("usage:  udpcli <IP address>\n");
-      exit(1);
-   }
+   
 
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
@@ -71,8 +70,7 @@ int main(int argc, char**argv)
       readers_thread_data[i].readers = num_readers;
       readers_thread_data[i].filename = malloc(sizeof(filename));
       readers_thread_data[i].filename = filename;
-      readers_thread_data[i].dest = malloc(sizeof(argv[1]));
-      readers_thread_data[i].dest = argv[1];
+      readers_thread_data[i].servaddr = servaddr;
       ret = pthread_create(&readers_thread[i], 0, readNumber, &readers_thread_data[i]);
       if(ret != 0){
          printf("Create pthread error!\n");
@@ -88,28 +86,13 @@ int main(int argc, char**argv)
       writers_thread_data[i].readers = num_readers;
       writers_thread_data[i].filename = malloc(sizeof(filename));
       writers_thread_data[i].filename = filename;
-      writers_thread_data[i].dest = malloc(sizeof(argv[1]));
-      writers_thread_data[i].dest = argv[1];
+      writers_thread_data[i].servaddr = servaddr;
       ret = pthread_create(&writers_thread[i], 0, increment, &writers_thread_data[i]);
       if(ret != 0){
          printf("Create pthread error!\n");
          exit(1);
       }
    }
-
-
-
-
-
-
-   // for(i=0;i<num_iterations;i++){
-
-
-
-
-
-   // } 
-
 
    // Cleaning up the simulation.
    for(i=0;i<num_writers;i++){
@@ -150,12 +133,13 @@ void* increment(void* parameter){
    int i;
    int k;
    int n;
+   int sockfd;
 
       char sendline[1000];
    char recvline[1000];
    char buffer[1000];
 
-      sprintf(sendline, "%d", 68); 
+   sprintf(sendline, "%d", 68); 
    strcat(sendline,"|");
    pid_t pid = getpid();
    sprintf(buffer, "%d", pid);
@@ -164,6 +148,8 @@ void* increment(void* parameter){
    strcat(sendline,"w");
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
+
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    for(k=1;k<=cur_thread->iterations;k++){
       printf("Writer connecting\n");
@@ -202,12 +188,13 @@ void* readNumber(void* parameter){
    int i;
    int k;
    int n;
+   int sockfd;
 
-         char sendline[1000];
+   char sendline[1000];
    char recvline[1000];
    char buffer[1000];
 
-         sprintf(sendline, "%d", 68); 
+   sprintf(sendline, "%d", 68); 
    strcat(sendline,"|");
    pid_t pid = getpid();
    sprintf(buffer, "%d", pid);
@@ -216,6 +203,8 @@ void* readNumber(void* parameter){
    strcat(sendline,"r");
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
+
+   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    for(k=1;k<=cur_thread->iterations;k++){
        printf("Reader connecting\n");

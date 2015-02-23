@@ -74,20 +74,24 @@ int main(int argc, char**argv)
 
       printf("CID: %d PID: %d RT: %c FILE: %s\n", clientID, pid, requestType, filename);
       
-      for(i=0;i<MAX_CLIENTS;i++){
-         if(clientGroups[i] == 0){
-            clientGroups[i] = pid;
-            printf("New Client\n");
-            startClientQueue(pid, requestType, i);
-            break;
-         }else if(clientGroups[i] == pid){
-            printf("Already have seen this client\n");
-            addToClientQueue(pid, requestType, i);
-            break;
+      if(requestType == 'x'){
+         // releaseClientQueue()
+      }else if(requestType == 'r' || requestType == 'w'){
+         for(i=0;i<MAX_CLIENTS;i++){
+            if(clientGroups[i] == 0){
+               clientGroups[i] = pid;
+               printf("New Client\n");
+               startClientQueue(pid, requestType, i);
+               break;
+            }else if(clientGroups[i] == pid){
+               printf("Already have seen this client\n");
+               addToClientQueue(pid, requestType, i);
+               break;
+            }
          }
-      }
-      for(i=0;i<MAX_CLIENTS;i++){
-            printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
+         for(i=0;i<MAX_CLIENTS;i++){
+               printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
+         }
       }
 
       printf("-------------------------------------------------------\n");
@@ -123,3 +127,16 @@ void addToClientQueue(int pid, char requestType, int index){
       temp->next = NULL;
    }
 }
+
+// void releaseClientQueue(){
+//    ticketNode * current;
+//    current = malloc(sizeof(ticketNode));
+//    current = clientQueues[index];
+
+//    while(current->requestType == 'r'){
+//       sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+//       current = current->next;
+//    }
+
+
+// }

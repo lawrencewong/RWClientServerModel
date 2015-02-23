@@ -263,7 +263,7 @@ void releaseClientQueue(int index, int pid, char requestType, char release){
       if(temp->requestType == 'w' && clientGroups[index].activeWriter == 0 && clientGroups[index].numActiveReaders == 0){
          runProcess(index, clientQueues[index]);
       }else if(temp->requestType == 'r'  && clientGroups[index].activeWriter == 0){// Reader next
-         while(temp->next->requestType == 'r' && temp->next != NULL){
+         while(temp->next->requestType == 'r' && temp != NULL){
             runProcess(index, temp);
             temp = temp->next;
          }

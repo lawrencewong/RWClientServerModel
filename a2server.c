@@ -100,7 +100,14 @@ int main(int argc, char**argv)
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
          // }
       }else if(requestType == 'x'){ /// RELEASE
-
+         for(i=0;i<MAX_CLIENTS;i++){
+            if(clientGroups[i].pid == pid){
+               if(clientGroups[i].activeWriter == 0){ // ONLY RELEASE WHEN WRITERS ARE DONE
+                  releaseClientQueue(i);
+               }
+            }
+            break;
+         }
       }
 
       printf("-------------------------------------------------------\n");
@@ -137,15 +144,21 @@ void addToClientQueue(int pid, char requestType, int index){
    }
 }
 
-void releaseClientQueue(){
-   ticketNode * current;
-   current = malloc(sizeof(ticketNode));
-   current = clientQueues[index];
+void releaseClientQueue(int index){
+   // Writer
+   // if(clientGroups[index].numActiveReaders == 0){
 
-   while(current->requestType == 'r'){
-      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      current = current->next;
-   }
+   
+   // }else{ // Reader - Check for other readers
 
+   // }
 
+   // ticketNode * current;
+   // current = malloc(sizeof(ticketNode));
+   // current = clientQueues[index];
+
+   // while(current->requestType == 'r'){
+   //    sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   //    current = current->next;
+   // }
 }

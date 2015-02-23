@@ -153,8 +153,10 @@ void* increment(void* parameter){
 
    for(k=1;k<=cur_thread->iterations;k++){
       printf("Writer connecting\n");
+      // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
+      // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
       printf("Writer Reicieved: %s\n", recvline);
@@ -175,6 +177,19 @@ void* increment(void* parameter){
          }
          fclose(fp);
          sleep(rand()%5);
+         //RELEASE
+         strcpy(sendline, "");
+         sprintf(sendline, "%d", 68); 
+         strcat(sendline,"|");
+         pid_t pid = getpid();
+         sprintf(buffer, "%d", pid);
+         strcat(sendline,buffer);
+         strcat(sendline,"|");
+         strcat(sendline,"x");
+         strcat(sendline,"|");
+         strcat(sendline,cur_thread->filename);
+         sendto(sockfd,sendline,strlen(sendline),0,
+             (struct sockaddr *)&servaddr,sizeof(servaddr));
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }

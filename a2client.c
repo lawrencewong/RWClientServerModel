@@ -150,10 +150,11 @@ void* increment(void* parameter){
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
-      printf("Writer connecting\n");
+      
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
+            printf("Writer COnnected\n");
       // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
@@ -221,9 +222,10 @@ void* readNumber(void* parameter){
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
-       printf("Reader connecting\n");
+       
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
+            printf("Reader COnnected\n");
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
       printf("Reader Reicieved: %s\n", recvline);

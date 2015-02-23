@@ -85,16 +85,18 @@ int main(int argc, char**argv)
             if(clientGroups[i].pid == pid){
                printf("Already have seen this client\n");
                addToClientQueue(pid, requestType, i, sockfd);
+               runProcess(i);
                break;
             }else if(clientGroups[i].pid == 0){
                clientGroups[i].pid = pid;
                printf("New Client\n");
                startClientQueue(pid, requestType, i, sockfd);
+               runProcess(i);
                break;
             }
          }
          
-         runProcess(i);
+         
 
          // for(i=0;i<MAX_CLIENTS;i++){
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);

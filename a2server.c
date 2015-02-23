@@ -241,14 +241,20 @@ void runProcess(int index, ticketNode * ticketToRun){
 // MAKE POP OFF FUNCTION
 void releaseClientQueue(int index, int pid, int requestType, int release){
    // Writer
-   // if(clientGroups[index].numActiveReaders == 0){
+   if(requestType == 'w' && release == 'O'){
 
-   //       // DECREMENT WRITER
-   //    // DO WHATEVER
-   // }else{ // Reader - Check for other readers
-   //       // DECREMENT READER 
-   //    // DO ALL UNTIL WRITER
-   // }
+         // DECREMENT WRITER
+      clientGroups[index].activeWriter = 0;
+      // DO WHATEVER
+   }else if(requestType == 'r' && release == 'O'){
+      // Reader - Check for other readers
+         // DECREMENT READER 
+      // DO ALL UNTIL WRITER
+      clientGroups[index].numActiveReaders--;
+   }
+   }else{ 
+      printf("NOT SUPPOSED TO HAPPEN\n");
+   }
 
    // ticketNode * current;
    // current = malloc(sizeof(ticketNode));

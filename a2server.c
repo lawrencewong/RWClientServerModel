@@ -207,7 +207,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       clientQueues[index] = ticketToRun->next;
       free(ticketToRun);
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-   }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter = 0){
+   }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
       clientGroups[index].numActiveReaders++;
       clientQueues[index] = ticketToRun->next;
       free(ticketToRun);

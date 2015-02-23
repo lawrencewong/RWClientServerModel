@@ -247,13 +247,29 @@ void releaseClientQueue(int index, int pid, int requestType, int release){
       clientGroups[index].activeWriter = 0;
       // DO WHATEVER
    }else if(requestType == 'r' && release == 'O'){
-      // Reader - Check for other readers
-         // DECREMENT READER 
-      // DO ALL UNTIL WRITER
+      // DECREMENT READER 
       clientGroups[index].numActiveReaders--;
    }else{ 
       printf("NOT SUPPOSED TO HAPPEN\n");
    }
+
+   if(clientQueues[index] != NULL){
+      ticketNode * temp;
+      temp = malloc(sizeof(ticketNode));
+      temp = clientQueues[i];
+
+      // Writer next
+      if(temp->requestType == 'w' && clientGroups[index].activeWriter == 0 && clientGroups.[index].numActiveReaders == 0){
+         runProcess(index, clientQueues[index]);
+      }else if(temp->requestType == 'r'  && clientGroups[index].activeWriter == 0){// Reader next
+         while(temp->next->requestType == 'r'){
+            runProcess(index, temp);
+            temp = temp->next;
+         }
+      }
+   }
+   
+
 
    // CHECK QUEUE FOR READERS
    // IF Next one is writer set flags and stop search let it run

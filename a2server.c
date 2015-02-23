@@ -94,7 +94,7 @@ int main(int argc, char**argv)
             }
          }
          
-         runProcess(sockfd);
+         runProcess(i);
 
          // for(i=0;i<MAX_CLIENTS;i++){
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
@@ -148,8 +148,8 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD){
 }
 
 // MAKE POP OFF FUNCTION
-void runProcess(int sockfd){
-   sendto(sockfd,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+void runProcess(int index){
+   sendto(clientGroups[index].socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
 
 }
 

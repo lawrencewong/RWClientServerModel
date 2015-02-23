@@ -144,19 +144,18 @@ void addToClientQueue(int pid, char requestType, int index){
 
 void releaseClientQueue(int index){
    // Writer
-   // if(clientGroups[index].numActiveReaders == 0){
+   if(clientGroups[index].numActiveReaders == 0){
+         
+   }else{ // Reader - Check for other readers
 
-   
-   // }else{ // Reader - Check for other readers
+   }
 
-   // }
+   ticketNode * current;
+   current = malloc(sizeof(ticketNode));
+   current = clientQueues[index];
 
-   // ticketNode * current;
-   // current = malloc(sizeof(ticketNode));
-   // current = clientQueues[index];
-
-   // while(current->requestType == 'r'){
-   //    sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-   //    current = current->next;
-   // }
+   while(current->requestType == 'r'){
+      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+      current = current->next;
+   }
 }

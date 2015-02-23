@@ -204,13 +204,11 @@ void runProcess(int index, ticketNode * ticketToRun){
    // RUN WRITER
    if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
       clientGroups[index].activeWriter = 1;
-      clientQueues[index] = ticketToRun->next;
-      free(ticketToRun);
+      ticketToRun = ticketToRun->next;
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
       clientGroups[index].numActiveReaders++;
-      clientQueues[index] = ticketToRun->next;
-      free(ticketToRun);
+      ticketToRun = ticketToRun->next;
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
    }
    // Run Reader

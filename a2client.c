@@ -147,9 +147,9 @@ void* increment(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
 
-   sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    for(k=1;k<=cur_thread->iterations;k++){
+      sockfd=socket(AF_INET,SOCK_DGRAM,0);
       printf("Writer connecting\n");
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
@@ -217,9 +217,10 @@ void* readNumber(void* parameter){
    strcat(sendline,"|");
    strcat(sendline,cur_thread->filename);
 
-   sockfd=socket(AF_INET,SOCK_DGRAM,0);
+   
 
    for(k=1;k<=cur_thread->iterations;k++){
+      sockfd=socket(AF_INET,SOCK_DGRAM,0);
        printf("Reader connecting\n");
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));

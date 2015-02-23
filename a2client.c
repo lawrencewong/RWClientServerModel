@@ -162,7 +162,7 @@ void* increment(void* parameter){
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Writer: %d COnnected\n",cur_thread->thread_id);
+            printf("Writer: %d COnnected SENT: %s\n",cur_thread->thread_id, sendline);
       // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
@@ -201,7 +201,7 @@ void* increment(void* parameter){
          strcat(sendline,buffer);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("Writer: %d done release \n", cur_thread->thread_id);
+         printf("Writer: %d done release sent: %s \n", cur_thread->thread_id, sendline);
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
@@ -249,7 +249,7 @@ void* readNumber(void* parameter){
        
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Reader: %d COnnected\n", cur_thread->thread_id);
+            printf("Reader: %d COnnected SENT %s\n", cur_thread->thread_id, sendline);
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
       printf("Reader: %d Reicieved: %s\n", cur_thread->thread_id,recvline);
@@ -286,7 +286,7 @@ void* readNumber(void* parameter){
          strcat(sendline,buffer);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("release sent from reader : %d \n", cur_thread->thread_id);
+         printf("release sent from reader : %d SENT %s \n", cur_thread->thread_id, sendline);
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }

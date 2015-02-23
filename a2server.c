@@ -57,13 +57,13 @@ int main(int argc, char**argv)
 
    ticketNode * temp;
    temp = malloc(sizeof(ticketNode));
-   temp.pid = 0;
-   temp.requestType = '\0';
-   temp.socketFD = 0;
-   temp.head = malloc(sizeof(ticketNode));
-   temp.head = NULL;
-   temp.next = malloc(sizeof(ticketNode));
-   temp.next = NULL;
+   temp->pid = 0;
+   temp->requestType = '\0';
+   temp->socketFD = 0;
+   temp->head = malloc(sizeof(ticketNode));
+   temp->head = NULL;
+   temp->next = malloc(sizeof(ticketNode));
+   temp->next = NULL;
 
 
    while(1)

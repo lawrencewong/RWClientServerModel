@@ -206,12 +206,12 @@ void runProcess(int index, ticketNode * ticketToRun){
       clientGroups[index].activeWriter = 1;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      ticketToRun = ticketToRun->next;
+      clientQueues[index] = ticketToRun->next;
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
       clientGroups[index].numActiveReaders++;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      ticketToRun = ticketToRun->next;
+      clientQueues[index] = ticketToRun->next;
    }
    // Run Reader
    

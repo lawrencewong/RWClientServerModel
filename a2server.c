@@ -136,9 +136,7 @@ int main(int argc, char**argv)
       }else if(release == 'O'){ /// RELEASE
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
-               if(clientGroups[i].activeWriter == 0){ // ONLY RELEASE WHEN WRITERS ARE DONE
-                  releaseClientQueue(i,pid, requestType, release);
-               }
+               releaseClientQueue(i,pid, requestType, release);
             }
             break;
          }
@@ -239,12 +237,12 @@ void runProcess(int index, ticketNode * ticketToRun){
 }
 
 // MAKE POP OFF FUNCTION
-void releaseClientQueue(int index, int pid, int requestType, int release){
+void releaseClientQueue(int index, int pid, char requestType, char release){
    // Writer
 
    printf("GOT RELEASE FROM: PID: %d RT: %c RELEASE: %c\n", pid, requestType, release);
    if(requestType == 'w' && release == 'O'){
-      
+
 
          // DECREMENT WRITER
       clientGroups[index].activeWriter = 0;

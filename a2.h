@@ -36,6 +36,6 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int th
 //
 void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration);
 //
-void releaseClientQueue(int index, int pid, int requestType, int release);
+void releaseClientQueue(int index, int pid, char requestType, char release);
 //
 void runProcess(int index, ticketNode * ticketToRun);

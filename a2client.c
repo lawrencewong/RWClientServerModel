@@ -48,8 +48,10 @@ int main(int argc, char**argv)
    printf("What is the file name?\n");
    scanf("%s",filename);
 
-   num_writers = 0.3 * num_processes;
-   num_readers = num_processes - num_writers;
+   num_writers = num_processes;
+   num_readers = 0;
+   // num_writers = 0.3 * num_processes;
+   // num_readers = num_processes - num_writers;
    printf("Number of iterations: %d\n",num_iterations);
    printf("Number of processes: %d Number of Writers: %d Number of Readers: %d \n",num_processes, num_writers, num_readers);
    printf("Filename: %s\n",filename);
@@ -237,7 +239,6 @@ void* readNumber(void* parameter){
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    for(k=1;k<=cur_thread->iterations;k++){
-
 
       strcpy(sendline, "");
       sprintf(buffer, "%d", pid);

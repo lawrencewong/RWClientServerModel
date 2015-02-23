@@ -12,6 +12,7 @@ typedef struct thread_data{
 typedef struct ticketNode{
 	int pid;
 	char requestType;
+	int socketFD;
 	struct ticketNode * head;
 	struct ticketNode * next;
 } ticketNode;
@@ -29,9 +30,9 @@ void* increment(void* parameter);
 // readNumber function that is used for reader threads. The thread will run for the amount of iterations. Before reading it will use it's own lock.
 void* readNumber(void* parameter);
 //
-void startClientQueue(int pid, char requestType, int index);
+void startClientQueue(int pid, char requestType, int index, int socketFD);
 //
-void addToClientQueue(int pid, char requestType, int index);
+void addToClientQueue(int pid, char requestType, int index, int socketFD);
 //
 void releaseClientQueue(int index);
 //

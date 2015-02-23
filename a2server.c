@@ -45,6 +45,7 @@ int main(int argc, char**argv)
       clientQueues[i]->requestType = '\0';
       clientQueues[i]->head = NULL;
       clientQueues[i]->next = NULL;
+      clientQueues[i]->socketFD = 0;
    }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -83,12 +84,12 @@ int main(int argc, char**argv)
 
             if(clientGroups[i].pid == pid){
                printf("Already have seen this client\n");
-               addToClientQueue(pid, requestType, i);
+               addToClientQueue(pid, requestType, i, sockfd);
                break;
             }else if(clientGroups[i].pid == 0){
                clientGroups[i].pid = pid;
                printf("New Client\n");
-               startClientQueue(pid, requestType, i);
+               startClientQueue(pid, requestType, i, sockfd);
                break;
             }
          }
@@ -113,26 +114,29 @@ int main(int argc, char**argv)
    }
 }
 
-void startClientQueue(int pid, char requestType, int index){
+void startClientQueue(int pid, char requestType, int index, int socketFD){
    clientQueues[index]->pid = pid;
    clientQueues[index]->requestType = requestType;
    clientQueues[index]->head = malloc(sizeof(ticketNode));
    clientQueues[index]->head = NULL;
    clientQueues[index]->next = malloc(sizeof(ticketNode));
    clientQueues[index]->next = NULL;
+   clientQueues[index]->socketFD= socketFD;
 }
 
-void addToClientQueue(int pid, char requestType, int index){
+void addToClientQueue(int pid, char requestType, int index, int socketFD){
    if(clientQueues[index]->pid == 0){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
       clientQueues[index]->next = NULL;
+      clientQueues[index]->socketFD= socketFD;
    }else{
       ticketNode * temp;
       ticketNode * current;
       temp = malloc(sizeof(ticketNode));
       temp->pid = pid;
       temp->requestType = requestType;
+      temp->socketFD = socketFD;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
       while(current->next != NULL){

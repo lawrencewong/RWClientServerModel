@@ -211,9 +211,10 @@ void runProcess(int index, ticketNode * ticketToRun){
          clientQueues[index] = NULL;
       }else{
          clientQueues[index] = clientQueues[index]->next;
+         printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
+
       }
       
-      printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
 
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
       clientGroups[index].numActiveReaders++;
@@ -224,9 +225,8 @@ void runProcess(int index, ticketNode * ticketToRun){
          clientQueues[index] = NULL;
       }else{
          clientQueues[index] = clientQueues[index]->next;
+         printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       }
-      printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
-
    }
    // Run Reader
    

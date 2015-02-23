@@ -142,8 +142,9 @@ int main(int argc, char**argv)
             if(clientGroups[i].pid == pid){
                printf("REKEASE FROM : %d\n", pid);
                releaseClientQueue(i,pid, requestType, release);
+               break;
             }
-            break;
+            
          }
       }
 

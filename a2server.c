@@ -65,6 +65,7 @@ int main(int argc, char**argv)
 
    while(1)
    {
+      memset((char*)&cliaddr, 0, sizeof(cliaddr));
       ticketNode * temp;
    temp = malloc(sizeof(ticketNode));
    temp->pid = 0;

@@ -32,10 +32,10 @@ void* increment(void* parameter);
 // readNumber function that is used for reader threads. The thread will run for the amount of iterations. Before reading it will use it's own lock.
 void* readNumber(void* parameter);
 //
-void startClientQueue(int pid, char requestType, int index, int socketFD);
+void startClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration));
 //
-void addToClientQueue(int pid, char requestType, int index, int socketFD);
+void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration));
 //
 void releaseClientQueue(int index);
 //
-void runProcess(int index, void * ticketToRun);
+void runProcess(int index, ticketNode * ticketToRun);

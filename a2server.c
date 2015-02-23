@@ -93,8 +93,8 @@ int main(int argc, char**argv)
       filename = token;
       token = strtok(NULL, delim);
       thread_id = atoi(token);
-      iteration = strtok(NULL, delim);
-      thread_id = atoi(token);
+      token = strtok(NULL, delim);
+      iteration = atoi(token);
 
       printf("PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d\n", pid, requestType, filename, thread_id, iteration);
       
@@ -144,7 +144,7 @@ int main(int argc, char**argv)
    }
 }
 
-void startClientQueue(int pid, char requestType, int index, int socketFD, int , thread_id, int iteration){
+void startClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
    clientQueues[index]->pid = pid;
    clientQueues[index]->requestType = requestType;
    clientQueues[index]->head = malloc(sizeof(ticketNode));
@@ -157,7 +157,7 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int , 
 
 }
 
-void addToClientQueue(int pid, char requestType, int index, int socketFD, int , thread_id, int iteration){
+void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration){
    if(clientQueues[index]->pid == 0){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
@@ -187,7 +187,7 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int , 
 // MAKE POP OFF FUNCTION
 void runProcess(int index, ticketNode * ticketToRun){
 
-   printf("ticketToRun DATA: PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration);
+   printf("ticketToRun DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration);
    sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
 
 }

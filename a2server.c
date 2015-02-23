@@ -256,7 +256,7 @@ void releaseClientQueue(int index, int pid, int requestType, int release){
    if(clientQueues[index] != NULL){
       ticketNode * temp;
       temp = malloc(sizeof(ticketNode));
-      temp = clientQueues[i];
+      temp = clientQueues[index];
 
       // Writer next
       if(temp->requestType == 'w' && clientGroups[index].activeWriter == 0 && clientGroups[index].numActiveReaders == 0){

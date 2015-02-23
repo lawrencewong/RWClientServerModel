@@ -34,3 +34,5 @@ void startClientQueue(int pid, char requestType, int index);
 void addToClientQueue(int pid, char requestType, int index);
 //
 void releaseClientQueue(int index);
+//
+void runProcess(int sockfd);

@@ -241,7 +241,10 @@ void runProcess(int index, ticketNode * ticketToRun){
 // MAKE POP OFF FUNCTION
 void releaseClientQueue(int index, int pid, int requestType, int release){
    // Writer
+
+   printf("GOT RELEASE FROM: PID: %d RT: %c RELEASE: %c\n", pid, requestType, release);
    if(requestType == 'w' && release == 'O'){
+      
 
          // DECREMENT WRITER
       clientGroups[index].activeWriter = 0;
@@ -262,7 +265,7 @@ void releaseClientQueue(int index, int pid, int requestType, int release){
       if(temp->requestType == 'w' && clientGroups[index].activeWriter == 0 && clientGroups[index].numActiveReaders == 0){
          runProcess(index, clientQueues[index]);
       }else if(temp->requestType == 'r'  && clientGroups[index].activeWriter == 0){// Reader next
-         while(temp->next->requestType == 'r'){
+         while(temp->next->requestType == 'r' && temp->next != NULL){
             runProcess(index, temp);
             temp = temp->next;
          }

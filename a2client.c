@@ -297,7 +297,7 @@ void* readNumber(void* parameter){
          strcat(sendline,"O");
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("release sent from reader : %d n", cur_thread->thread_id);
+         printf("release sent from reader : %d \n", cur_thread->thread_id);
          // printf("release sent from reader : %d SENT %s \n", cur_thread->thread_id, sendline);
          
       }else{

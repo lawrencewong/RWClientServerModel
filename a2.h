@@ -16,6 +16,12 @@ typedef struct ticketNode{
 	struct ticketNode * next;
 } ticketNode;
 
+typedef struct clientGroupInfo{
+	int pid;
+	int numActiveReaders;
+	int activeWriter;
+} clientGroupInfo;
+
 // initializeFile function sets up the binary file based on how many writer threads there will be.
 void* initializeFile(int num_writers, char * filename);
 // increment function that is used for the writer threads. The thread will run for the amount of iterations. Before reading and writing writer thread will lock all readers and the main writer lock.

@@ -229,9 +229,11 @@ void* readNumber(void* parameter){
 
          }
          fclose(fp);
-         printf("Iteration #: %d Reader Thread ID: %d contents: %s \n",k,cur_thread->thread_id+1, contents_string);
+         printf("Iteration #: %d Reader Thread ID: %d Contents: %s \n",k,cur_thread->thread_id+1, contents_string);
          fflush(stdout);
          sleep(rand()%5);
+
+
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }

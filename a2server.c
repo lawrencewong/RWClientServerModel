@@ -16,11 +16,12 @@
 
 ticketNode * clientQueues[MAX_CLIENTS];
 clientGroupInfo clientGroups[MAX_CLIENTS];
+struct sockaddr_in servaddr,cliaddr;
 
 int main(int argc, char**argv)
 {
    int sockfd,n;
-   struct sockaddr_in servaddr,cliaddr;
+   
    socklen_t len;
    char mesg[1000];
    char *token;
@@ -91,8 +92,8 @@ int main(int argc, char**argv)
                break;
             }
          }
-         sendto(sockfd,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-
+         
+         runProcess(sockfd);
 
          // for(i=0;i<MAX_CLIENTS;i++){
          //       printf("QUEUE CHECK PID: %d\n", clientQueues[i]->pid);
@@ -142,20 +143,29 @@ void addToClientQueue(int pid, char requestType, int index){
    }
 }
 
+// MAKE POP OFF FUNCTION
+void runProcess(int sockfd){
+   sendto(sockfd,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+
+}
+
 void releaseClientQueue(int index){
    // Writer
-   if(clientGroups[index].numActiveReaders == 0){
-         
-   }else{ // Reader - Check for other readers
+   // if(clientGroups[index].numActiveReaders == 0){
 
-   }
+   //       // DECREMENT WRITER
+   //    // DO WHATEVER
+   // }else{ // Reader - Check for other readers
+   //       // DECREMENT READER 
+   //    // DO ALL UNTIL WRITER
+   // }
 
-   ticketNode * current;
-   current = malloc(sizeof(ticketNode));
-   current = clientQueues[index];
+   // ticketNode * current;
+   // current = malloc(sizeof(ticketNode));
+   // current = clientQueues[index];
 
-   while(current->requestType == 'r'){
-      sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      current = current->next;
-   }
+   // while(current->requestType == 'r'){
+   //    sendto(sockfd,mesg,n,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   //    current = current->next;
+   // }
 }

@@ -115,6 +115,8 @@ int main(int argc, char**argv)
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
                if(clientGroups[i].activeWriter == 0){ // ONLY RELEASE WHEN WRITERS ARE DONE
+                  temp = clientQueues[i];
+                  
                   releaseClientQueue(i);
                }
             }

@@ -13,6 +13,8 @@ typedef struct ticketNode{
 	int pid;
 	char requestType;
 	int socketFD;
+	int thread_id;
+	int iteration;
 	struct ticketNode * head;
 	struct ticketNode * next;
 } ticketNode;
@@ -36,4 +38,4 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD);
 //
 void releaseClientQueue(int index);
 //
-void runProcess(int index);
+void runProcess(int index, void * ticketToRun);

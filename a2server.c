@@ -31,6 +31,8 @@ int main(int argc, char**argv)
    int clientID;
    int pid;
    int i;
+   int thread_id;
+   int iteration;
    
 
 
@@ -46,6 +48,8 @@ int main(int argc, char**argv)
       clientQueues[i]->head = NULL;
       clientQueues[i]->next = NULL;
       clientQueues[i]->socketFD = 0;
+      clientQueues[i]->thread_id = 0;
+      clientQueues[i]->iteration = 0;
    }
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
@@ -64,6 +68,8 @@ int main(int argc, char**argv)
    temp->head = NULL;
    temp->next = malloc(sizeof(ticketNode));
    temp->next = NULL;
+   temp->thread_id = 0;
+   temp->iteration = 0;
 
 
    while(1)
@@ -85,8 +91,12 @@ int main(int argc, char**argv)
       token = strtok(NULL, delim);
       filename = malloc(sizeof(token));
       filename = token;
+      token = strtok(NULL, delim);
+      thread_id = atoi(token);
+      iteration = strtok(NULL, delim);
+      thread_id = atoi(token);
 
-      printf("PID: %d RT: %c FILE: %s\n", pid, requestType, filename);
+      printf("PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d\n", pid, requestType, filename, thread_id, iteration);
       
       // REQUEST
       if(requestType == 'r' || requestType == 'w'){
@@ -94,14 +104,22 @@ int main(int argc, char**argv)
 
             if(clientGroups[i].pid == pid){
                printf("Already have seen this client\n");
-               addToClientQueue(pid, requestType, i, sockfd);
-               runProcess(i);
+               addToClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
+               temp = clientQueues[i];
+                  while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
+                     temp = temp->next;
+               }
+               runProcess(i, temp);
                break;
             }else if(clientGroups[i].pid == 0){
                clientGroups[i].pid = pid;
                printf("New Client\n");
-               startClientQueue(pid, requestType, i, sockfd);
-               runProcess(i);
+               startClientQueue(pid, requestType, i, sockfd, thread_id, iteration);
+               temp = clientQueues[i];
+                  while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
+                     temp = temp->next;
+               }
+               runProcess(i, temp);
                break;
             }
          }
@@ -115,8 +133,6 @@ int main(int argc, char**argv)
          for(i=0;i<MAX_CLIENTS;i++){
             if(clientGroups[i].pid == pid){
                if(clientGroups[i].activeWriter == 0){ // ONLY RELEASE WHEN WRITERS ARE DONE
-                  temp = clientQueues[i];
-                  
                   releaseClientQueue(i);
                }
             }
@@ -128,7 +144,7 @@ int main(int argc, char**argv)
    }
 }
 
-void startClientQueue(int pid, char requestType, int index, int socketFD){
+void startClientQueue(int pid, char requestType, int index, int socketFD, int , thread_id, int iteration){
    clientQueues[index]->pid = pid;
    clientQueues[index]->requestType = requestType;
    clientQueues[index]->head = malloc(sizeof(ticketNode));
@@ -136,14 +152,19 @@ void startClientQueue(int pid, char requestType, int index, int socketFD){
    clientQueues[index]->next = malloc(sizeof(ticketNode));
    clientQueues[index]->next = NULL;
    clientQueues[index]->socketFD= socketFD;
+   clientQueues[index]->thread_id= thread_id;
+   clientQueues[index]->iteration= iteration;
+
 }
 
-void addToClientQueue(int pid, char requestType, int index, int socketFD){
+void addToClientQueue(int pid, char requestType, int index, int socketFD, int , thread_id, int iteration){
    if(clientQueues[index]->pid == 0){
       clientQueues[index]->pid = pid;
       clientQueues[index]->requestType = requestType;
       clientQueues[index]->next = NULL;
       clientQueues[index]->socketFD= socketFD;
+      clientQueues[index]->thread_id= thread_id;
+      clientQueues[index]->iteration= iteration;
    }else{
       ticketNode * temp;
       ticketNode * current;
@@ -151,6 +172,8 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD){
       temp->pid = pid;
       temp->requestType = requestType;
       temp->socketFD = socketFD;
+      temp->thread_id = thread_id;
+      temp->iteration = iteration;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];
       while(current->next != NULL){
@@ -162,9 +185,10 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD){
 }
 
 // MAKE POP OFF FUNCTION
-void runProcess(int index){
+void runProcess(int index, ticketNode * ticketToRun){
 
-   sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
+   printf("ticketToRun DATA: PID: %d RT: %c FILE: %s THREAD: %d ITERATION: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration);
+   sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
 
 }
 

@@ -150,6 +150,13 @@ void* increment(void* parameter){
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+      strcat(sendline,"|");
+      sprintf(buffer,"%d",cur_thread->thread_id);
+      strcat(sendline,buffer);
+      strcat(sendline,"|");
+      sprintf(buffer,"%d",k);
+      strcat(sendline,buffer);
       
       // REQUEST
             sendto(sockfd,sendline,strlen(sendline),0,
@@ -186,6 +193,12 @@ void* increment(void* parameter){
          strcat(sendline,"x");
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
+         strcat(sendline,"|");
+         sprintf(buffer,"%d",cur_thread->thread_id);
+         strcat(sendline,buffer);
+         strcat(sendline,"|");
+         sprintf(buffer,"%d",k);
+         strcat(sendline,buffer);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
          printf("Writer: %d done release \n", cur_thread->thread_id);
@@ -224,6 +237,13 @@ void* readNumber(void* parameter){
 
    for(k=1;k<=cur_thread->iterations;k++){
       sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+      strcat(sendline,"|");
+      sprintf(buffer,"%d",cur_thread->thread_id);
+      strcat(sendline,buffer);
+      strcat(sendline,"|");
+      sprintf(buffer,"%d",k);
+      strcat(sendline,buffer);
        
             sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
@@ -257,6 +277,12 @@ void* readNumber(void* parameter){
          strcat(sendline,"x");
          strcat(sendline,"|");
          strcat(sendline,cur_thread->filename);
+         strcat(sendline,"|");
+         sprintf(buffer,"%d",cur_thread->thread_id);
+         strcat(sendline,buffer);
+         strcat(sendline,"|");
+         sprintf(buffer,"%d",k);
+         strcat(sendline,buffer);
          sendto(sockfd,sendline,strlen(sendline),0,
              (struct sockaddr *)&servaddr,sizeof(servaddr));
          printf("release sent from reader : %d \n", cur_thread->thread_id);

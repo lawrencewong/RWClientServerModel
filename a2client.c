@@ -157,7 +157,6 @@ void* increment(void* parameter){
              (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      fputs(recvline,stdout);
       printf("Writer Reicieved: %s\n", recvline);
 
       fp = fopen(cur_thread->filename,"rb+");
@@ -212,21 +211,25 @@ void* readNumber(void* parameter){
              (struct sockaddr *)&servaddr,sizeof(servaddr));
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      fputs(recvline,stdout);
       printf("Reader Reicieved: %s\n", recvline);
 
-      strcpy(contents_string,"");
-      fp = fopen(cur_thread->filename,"rb+");
-      fread(contents, sizeof(int),cur_thread->writers, fp);
-      for(i=0;i<cur_thread->writers;i++){
-         sprintf(temp, "%d ",contents[i]);
-         strcat(contents_string,temp);
+      if( strcmp("AWK", recvline) == 0){
 
+         strcpy(contents_string,"");
+         fp = fopen(cur_thread->filename,"rb+");
+         fread(contents, sizeof(int),cur_thread->writers, fp);
+         for(i=0;i<cur_thread->writers;i++){
+            sprintf(temp, "%d ",contents[i]);
+            strcat(contents_string,temp);
+
+         }
+         fclose(fp);
+         printf("Iteration #: %d Reader Thread ID: %d contents: %s \n",k,cur_thread->thread_id+1, contents_string);
+         fflush(stdout);
+         sleep(rand()%5);
+      }else{
+         printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
-      fclose(fp);
-      printf("Iteration #: %d Reader Thread ID: %d contents: %s \n",k,cur_thread->thread_id+1, contents_string);
-      fflush(stdout);
-      sleep(rand()%5);
 
    }
    free(contents_string);

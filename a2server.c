@@ -210,8 +210,8 @@ void runProcess(int index, ticketNode * ticketToRun){
       clientGroups[index].activeWriter = 1;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      printf("SENDING WRITER TO READER: %d ITERATION %d \n", ticketToRun->thread_id, ticketToRun->iteration);
-      printf("SENDING WRITER TO READER: %d ITERATION %d \n", clientQueues[index]->thread_id, clientQueues[index]->iteration);
+      printf("SENDING AWK TO WRITER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
+      printf("SENDING AWk TO WRITER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
          clientQueues[index] = NULL;
@@ -228,8 +228,8 @@ void runProcess(int index, ticketNode * ticketToRun){
       clientGroups[index].numActiveReaders++;
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
-      printf("SENDING AWK TO READER: %d ITERATION %d \n", ticketToRun->thread_id, ticketToRun->iteration);
-      printf("SENDING AWK TO READER: %d ITERATION %d \n", clientQueues[index]->thread_id, clientQueues[index]->iteration);
+      printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
+      printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
          clientQueues[index] = NULL;

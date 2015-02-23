@@ -207,7 +207,7 @@ void runProcess(int index, ticketNode * ticketToRun){
       
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
-      clientQueues[index] = ticketToRun->next;
+      &clientQueues[index] = ticketToRun->next;
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
 
    }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
@@ -216,9 +216,9 @@ void runProcess(int index, ticketNode * ticketToRun){
       sendto(ticketToRun->socketFD,"AWK",3,0,(struct sockaddr *)&cliaddr,sizeof(cliaddr));
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       
-      clientQueues[index] = ticketToRun->next;
+      &clientQueues[index] = ticketToRun->next;
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
-      
+
    }
    // Run Reader
    

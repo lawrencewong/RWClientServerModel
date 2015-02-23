@@ -159,7 +159,6 @@ void startClientQueue(int pid, char requestType, int index, int socketFD, int th
    clientQueues[index]->socketFD= socketFD;
    clientQueues[index]->thread_id= thread_id;
    clientQueues[index]->iteration= iteration;
-   clientQueues[index]->cliaddr = malloc(sizeof(struct sockaddr_in));
    clientQueues[index]->cliaddr = cliaddr;
 
 }
@@ -174,7 +173,6 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       clientQueues[index]->socketFD= socketFD;
       clientQueues[index]->thread_id= thread_id;
       clientQueues[index]->iteration= iteration;
-      clientQueues[index]->cliaddr = malloc(sizeof(struct sockaddr_in));
       clientQueues[index]->cliaddr = cliaddr;
    }else{
       printf("ADDING TO QUEUE\n");
@@ -186,7 +184,6 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
       temp->socketFD = socketFD;
       temp->thread_id = thread_id;
       temp->iteration = iteration;
-      temp->cliaddr = malloc(sizeof(struct sockaddr_in));
       temp->cliaddr = cliaddr;
       current = malloc(sizeof(ticketNode));
       current = clientQueues[index];

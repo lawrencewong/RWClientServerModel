@@ -159,20 +159,25 @@ void* increment(void* parameter){
       recvline[n]=0;
       printf("Writer Reicieved: %s\n", recvline);
 
-      fp = fopen(cur_thread->filename,"rb+");
+      if( strcmp("AWK", recvline) == 0){
 
-      for( i = 0; i < cur_thread->writers; i++){
-         fseek(fp,sizeof(int)*i,SEEK_SET);
-         fread(&value, sizeof(int), 1, fp);
+         fp = fopen(cur_thread->filename,"rb+");
 
-         if( i == cur_thread->thread_id){
-            value++;
+         for( i = 0; i < cur_thread->writers; i++){
             fseek(fp,sizeof(int)*i,SEEK_SET);
-            fwrite(&value, sizeof(int), 1, fp);
+            fread(&value, sizeof(int), 1, fp);
+
+            if( i == cur_thread->thread_id){
+               value++;
+               fseek(fp,sizeof(int)*i,SEEK_SET);
+               fwrite(&value, sizeof(int), 1, fp);
+            }
          }
+         fclose(fp);
+         sleep(rand()%5);
+      }else{
+         printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
-      fclose(fp);
-      sleep(rand()%5);
    }
 }
 

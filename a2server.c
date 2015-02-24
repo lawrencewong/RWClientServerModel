@@ -218,7 +218,7 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
 
 void runProcess(int index){
 
-   printf("TOCKET TO RUN DATA: PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", clientGroups[index]->pid, clientGroups[index]->requestType, clientGroups[index]->thread_id, clientGroups[index]->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
+   printf("Next ticket to run. PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
    
    // RUN WRITER
    if(clientGroups[index]->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){

@@ -1,9 +1,8 @@
-/* Sample UDP client */
-
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -11,6 +10,7 @@
 #include <sys/wait.h>
 #include <pthread.h>
 #include <math.h>
+#include <arpa/inet.h>
 #include "a2.h"
 
 struct sockaddr_in servaddr;

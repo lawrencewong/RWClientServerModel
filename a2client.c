@@ -36,7 +36,7 @@ int main(int argc, char**argv)
    printf("This is client %d\n", getpid());
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
-   printf("How many threads? (30% will be writers)\n");
+   printf("How many threads?\n");
    scanf("%d",&num_processes);
    printf("What is the filename?\n");
    scanf("%s",filename);

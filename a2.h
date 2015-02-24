@@ -38,4 +38,4 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
 //
 void releaseClientQueue(int index, int pid, char requestType, char release);
 //
-void runProcess(int index, ticketNode * ticketToRun);
+void runProcess(int index);

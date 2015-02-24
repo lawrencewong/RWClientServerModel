@@ -1,3 +1,8 @@
+/*
+a2server.c
+Server for Readers and Writers problem using a ticket server
+Lawrence Wong
+*/
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -12,8 +17,10 @@
 #include <arpa/inet.h>
 #include "a2.h"
 
+// Max number of clients for now set to 10
 #define MAX_CLIENTS 10
 
+// Setting up global queues and queue infos as well as addresses
 ticketNode * clientQueues[MAX_CLIENTS];
 clientGroupInfo clientGroups[MAX_CLIENTS];
 struct sockaddr_in servaddr,cliaddr;
@@ -21,7 +28,6 @@ struct sockaddr_in servaddr,cliaddr;
 int main(int argc, char**argv)
 {
    int sockfd,n;
-   
    socklen_t len;
    char mesg[1000];
    char *token;
@@ -29,21 +35,18 @@ int main(int argc, char**argv)
    char * filename;
    char requestType;
    char release;
-   int clientID;
    int pid;
    int i;
    int thread_id;
    int iteration;
    struct sockaddr_in cliaddr;
    
-
-
+   // Seting up array of queues and info
    for (i = 0; i < MAX_CLIENTS; i++)
    {
       clientGroups[i].pid = 0;
       clientGroups[i].numActiveReaders = 0;
       clientGroups[i].activeWriter = 0;
-
       clientQueues[i] = malloc(sizeof(ticketNode));
       clientQueues[i]->pid = 0;
       clientQueues[i]->requestType = '\0';
@@ -53,30 +56,34 @@ int main(int argc, char**argv)
       clientQueues[i]->thread_id = 0;
       clientQueues[i]->iteration = 0;
    }
+
+   // Creating server socket
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
+   // Setting up server address
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=htonl(INADDR_ANY);
    servaddr.sin_port=htons(32000);
    bind(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
 
-   
-
-   while(1)
-   {
+   // Main server loop
+   while(1){
+      
+      // Refreshing client address
       memset((char*)&cliaddr, 0, sizeof(cliaddr));
-      ticketNode * temp;
-   temp = malloc(sizeof(ticketNode));
-   temp->pid = 0;
-   temp->requestType = '\0';
-   temp->socketFD = 0;
-   temp->head = malloc(sizeof(ticketNode));
-   temp->head = NULL;
-   temp->next = malloc(sizeof(ticketNode));
-   temp->next = NULL;
-   temp->thread_id = 0;
-   temp->iteration = 0;
+
+      // ticketNode * temp;
+      // temp = malloc(sizeof(ticketNode));
+      // temp->pid = 0;
+      // temp->requestType = '\0';
+      // temp->socketFD = 0;
+      // temp->head = malloc(sizeof(ticketNode));
+      // temp->head = NULL;
+      // temp->next = malloc(sizeof(ticketNode));
+      // temp->next = NULL;
+      // temp->thread_id = 0;
+      // temp->iteration = 0;
 
       printf("Waiting\n");
       len = sizeof(cliaddr);
@@ -111,21 +118,21 @@ int main(int argc, char**argv)
             if(clientGroups[i].pid == pid){
                printf("Already have seen this client\n");
                addToClientQueue(pid, requestType, i, sockfd, thread_id, iteration, cliaddr);
-               temp = clientQueues[i];
+               // temp = clientQueues[i];
                //    while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
                //       temp = temp->next;
                // }
-               runProcess(i, temp);
+               runProcess(i);
                break;
             }else if(clientGroups[i].pid == 0){
                clientGroups[i].pid = pid;
                printf("New Client\n");
                startClientQueue(pid, requestType, i, sockfd, thread_id, iteration, cliaddr);
-               temp = clientQueues[i];
+               // temp = clientQueues[i];
                // while(temp->thread_id != thread_id && temp->iteration != iteration && temp->requestType != requestType){
                //       temp = temp->next;
                // }
-               runProcess(i, temp);
+               runProcess(i);
                break;
             }
          }
@@ -209,17 +216,16 @@ void addToClientQueue(int pid, char requestType, int index, int socketFD, int th
 }
 
 
-void runProcess(int index, ticketNode * ticketToRun){
+void runProcess(int index){
 
-   printf("ticketToRun DATA: PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", ticketToRun->pid, ticketToRun->requestType, ticketToRun->thread_id, ticketToRun->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
+   printf("TOCKET TO RUN DATA: PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", clientGroups[index]->pid, clientGroups[index]->requestType, clientGroups[index]->thread_id, clientGroups[index]->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
    
    // RUN WRITER
-   if(ticketToRun->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
+   if(clientGroups[index]->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
       printf("RUNNING WRITER\n");
       clientGroups[index].activeWriter = 1;
       
       sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&clientQueues[index]->cliaddr,sizeof(clientQueues[index]->cliaddr));
-      printf("SENDING AWK TO WRITER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
       printf("SENDING AWk TO WRITER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
@@ -231,13 +237,12 @@ void runProcess(int index, ticketNode * ticketToRun){
       }
       
 
-   }else if(ticketToRun->requestType == 'r' && clientGroups[index].activeWriter == 0){
+   }else if(clientGroups[index]->requestType == 'r' && clientGroups[index].activeWriter == 0){
       printf("RUNNING READER\n");
       
       clientGroups[index].numActiveReaders++;
       
       sendto(clientQueues[index]->socketFD,"AWK",3,0,(struct sockaddr *)&clientQueues[index]->cliaddr,sizeof(clientQueues[index]->cliaddr));
-      printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", ticketToRun->thread_id, ticketToRun->iteration, ticketToRun->socketFD);
       printf("SENDING AWK TO READER: %d ITERATION %d SOCKET: %d\n", clientQueues[index]->thread_id, clientQueues[index]->iteration, clientQueues[index]->socketFD);
       printf("clientQueues[index] DATA: PID: %d RT: %c THREAD: %d ITERATION: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration);
       if(clientQueues[index]->next == NULL){
@@ -282,7 +287,7 @@ void releaseClientQueue(int index, int pid, char requestType, char release){
          
          while(temp != NULL){
             if(temp->requestType == 'r'){
-               runProcess(index, temp);               
+               runProcess(index);               
             }
             temp = temp->next;
          }

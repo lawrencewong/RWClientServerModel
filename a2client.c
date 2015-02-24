@@ -1,3 +1,7 @@
+/*
+Client for Readers and Writers problem using a ticket server
+Lawrence Wong
+*/
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
@@ -163,17 +167,16 @@ void* increment(void* parameter){
       
       // Requesting write permission
       sendto(sockfd,sendline,strlen(sendline),0, (struct sockaddr *)&servaddr,sizeof(servaddr));
+      printf("Writer: %d Iteration: %d. Request Sent.\n",cur_thread->thread_id+1,k);
       
-      printf("Writer: %d COnnected \n",cur_thread->thread_id+1);
-      // GET AWK
+      // Geting AWK from server for write
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Writer: %d Reicieved: %s\n", cur_thread->thread_id+1, recvline);
 
+      // If writer gets AWK from the server it is allowed to write
       if( strcmp("AWK", recvline) == 0){
-
+         printf("Writer: %d Iteration: %d. Writing.\n",cur_thread->thread_id+1,k);
          fp = fopen(cur_thread->filename,"rb+");
-
          for( i = 0; i < cur_thread->writers; i++){
             fseek(fp,sizeof(int)*i,SEEK_SET);
             fread(&value, sizeof(int), 1, fp);
@@ -186,8 +189,9 @@ void* increment(void* parameter){
          }
          fclose(fp);
          sleep(rand()%5);
-         printf("Writer: %d Done writing. Now sending relase\n", cur_thread->thread_id+1);
-         //RELEASE
+         printf("Writer: %d Iteration: %d. Done writing. Now sending release.\n", cur_thread->thread_id+1,k);
+         
+         // Creating relase packet with O
          strcpy(sendline, "");
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
@@ -203,10 +207,11 @@ void* increment(void* parameter){
          strcat(sendline,buffer);
          strcat(sendline,"|");
          strcat(sendline,"O");
-         sendto(sockfd,sendline,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("Writer: %d done release\n", cur_thread->thread_id+1);
-         // printf("Writer: %d done release sent: %s \n", cur_thread->thread_id, sendline);
+
+         // Sending release packet
+         sendto(sockfd,sendline,strlen(sendline),0,(struct sockaddr *)&servaddr,sizeof(servaddr));
+         printf("Writer: %d Iteration: %d. Done sending release\n", cur_thread->thread_id+1, k);
+
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
@@ -225,18 +230,17 @@ void* readNumber(void* parameter){
    int k;
    int n;
    int sockfd;
-
    char sendline[1000];
    char recvline[1000];
    char buffer[1000];
-
    pid_t pid = getpid();
 
-
+   // Setting up socket for thread
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
 
    for(k=1;k<=cur_thread->iterations;k++){
 
+      // Creating request for read packet
       strcpy(sendline, "");
       sprintf(buffer, "%d", pid);
       strcat(sendline,buffer);
@@ -253,31 +257,30 @@ void* readNumber(void* parameter){
       strcat(sendline,"|");
       strcat(sendline,"X");
        
-            sendto(sockfd,sendline,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-            printf("Reader: %d COnnected\n", cur_thread->thread_id+1);
-            // printf("Reader: %d COnnected SENT %s\n", cur_thread->thread_id, sendline);
+      // Sending packet to get permission to read
+      sendto(sockfd,sendline,strlen(sendline),0,(struct sockaddr *)&servaddr,sizeof(servaddr));
+      printf("Reader: %d Iteration: %d. Request Sent.\n",cur_thread->thread_id+1,k);
+      
+      // Geting AWK from server for read
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;
-      printf("Reader: %d Reicieved: %s\n", cur_thread->thread_id+1,recvline);
 
+      // If client recieved AWK from server, it is allowed to read
       if( strcmp("AWK", recvline) == 0){
-
          strcpy(contents_string,"");
          fp = fopen(cur_thread->filename,"rb+");
          fread(contents, sizeof(int),cur_thread->writers, fp);
          for(i=0;i<cur_thread->writers;i++){
             sprintf(temp, "%d ",contents[i]);
             strcat(contents_string,temp);
-
          }
          fclose(fp);
-         printf("Iteration #: %d Reader Thread ID: %d Contents: %s \n",k,cur_thread->thread_id+1, contents_string);
+         printf("Reader: %d Iteration #: %d.Contents: %s \n",cur_thread->thread_id+1, k,contents_string);
          fflush(stdout);
          sleep(rand()%5);
+         printf("Reader: %d Iteration: %d. Done reading. Now sending release.\n", cur_thread->thread_id+1,k);
 
-         printf("Sending release from reader: %d\n", cur_thread->thread_id+1);
-         //RELEASE
+         // Creating relase packet with O
          strcpy(sendline, "");
          sprintf(buffer, "%d", pid);
          strcat(sendline,buffer);
@@ -293,15 +296,14 @@ void* readNumber(void* parameter){
          strcat(sendline,buffer);
          strcat(sendline,"|");
          strcat(sendline,"O");
-         sendto(sockfd,sendline,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-         printf("release sent from reader : %d \n", cur_thread->thread_id+1);
-         // printf("release sent from reader : %d SENT %s \n", cur_thread->thread_id, sendline);
-         
+
+         // Sending release packet
+         sendto(sockfd,sendline,strlen(sendline),0,(struct sockaddr *)&servaddr,sizeof(servaddr));
+         printf("Reader: %d Iteration: %d. Done sending release\n", cur_thread->thread_id+1, k);
+
       }else{
          printf("ERROR: Did not recieve AWK, got back: %s\n", recvline);
       }
-
    }
    free(contents_string);
 }

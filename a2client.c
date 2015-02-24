@@ -13,8 +13,9 @@
 #include <arpa/inet.h>
 #include "a2.h"
 
-struct sockaddr_in servaddr;
+#define DESTINATION_IP "127.0.0.1"
 
+struct sockaddr_in servaddr;
 
 int main(int argc, char**argv)
 {
@@ -27,26 +28,17 @@ int main(int argc, char**argv)
    int ret = 0;
    FILE *fp;
 
-
-
-   if (argc != 2)
-   {
-      printf("usage:  udpcli <IP address>\n");
-      exit(1);
-   }
-
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
-   servaddr.sin_addr.s_addr=inet_addr(argv[1]);
+   servaddr.sin_addr.s_addr=inet_addr(DESTINATION_IP);
    servaddr.sin_port=htons(32000);
 
-   
-
+   printf("This is client %d\n", getpid());
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
-   printf("How many processes?\n");
+   printf("How many threads? (30% will be writers)\n");
    scanf("%d",&num_processes);
-   printf("What is the file name?\n");
+   printf("What is the filename?\n");
    scanf("%s",filename);
 
    num_writers = ceil(0.3 * num_processes);

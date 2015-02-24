@@ -5,7 +5,6 @@ typedef struct thread_data{
 	int writers;
 	int readers;
 	char * filename;
-	char * dest;
 	struct sockaddr_in servaddr;
 } thread_data;
 

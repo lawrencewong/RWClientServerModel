@@ -13,8 +13,10 @@
 #include <arpa/inet.h>
 #include "a2.h"
 
+// Destination IP
 #define DESTINATION_IP "127.0.0.1"
 
+// Server address
 struct sockaddr_in servaddr;
 
 int main(int argc, char**argv)
@@ -28,12 +30,14 @@ int main(int argc, char**argv)
    int ret = 0;
    FILE *fp;
 
+   // Setting up server address
    bzero(&servaddr,sizeof(servaddr));
    servaddr.sin_family = AF_INET;
    servaddr.sin_addr.s_addr=inet_addr(DESTINATION_IP);
    servaddr.sin_port=htons(32000);
 
-   printf("This is client %d\n", getpid());
+   // Getting the user input
+   printf("\nThis is client: %d\n", getpid());
    printf("How many iterations?\n");
    scanf("%d",&num_iterations);
    printf("How many threads?\n");
@@ -41,12 +45,14 @@ int main(int argc, char**argv)
    printf("What is the filename?\n");
    scanf("%s",filename);
 
+   // Making 30% of the threads writers
    num_writers = ceil(0.3 * num_processes);
    num_readers = num_processes - num_writers;
    printf("Number of iterations: %d\n",num_iterations);
    printf("Number of processes: %d Number of Writers: %d Number of Readers: %d \n",num_processes, num_writers, num_readers);
    printf("Filename: %s\n",filename);
 
+   // Starting File
    initializeFile(num_writers, filename);
    
    // Setting up the reader and writer thread arrays. 

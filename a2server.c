@@ -221,7 +221,7 @@ void runProcess(int index){
    printf("Next ticket to run. PID: %d RT: %c THREAD: %d ITERATION: %d WF: %d NR: %d\n", clientQueues[index]->pid, clientQueues[index]->requestType, clientQueues[index]->thread_id, clientQueues[index]->iteration, clientGroups[index].activeWriter, clientGroups[index].numActiveReaders);
    
    // RUN WRITER
-   if(clientGroups[index]->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
+   if(clientQueues[index]->requestType == 'w' && clientGroups[index].numActiveReaders == 0 && clientGroups[index].activeWriter == 0){
       printf("RUNNING WRITER\n");
       clientGroups[index].activeWriter = 1;
       
@@ -237,7 +237,7 @@ void runProcess(int index){
       }
       
 
-   }else if(clientGroups[index]->requestType == 'r' && clientGroups[index].activeWriter == 0){
+   }else if(clientQueues[index]->requestType == 'r' && clientGroups[index].activeWriter == 0){
       printf("RUNNING READER\n");
       
       clientGroups[index].numActiveReaders++;
@@ -282,7 +282,7 @@ void releaseClientQueue(int index, int pid, char requestType, char release){
 
       // Writer next
       if(temp->requestType == 'w' && clientGroups[index].activeWriter == 0 && clientGroups[index].numActiveReaders == 0){
-         runProcess(index, clientQueues[index]);
+         runProcess(index);
       }else if(temp->requestType == 'r'  && clientGroups[index].activeWriter == 0){// Reader next
          
          while(temp != NULL){

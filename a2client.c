@@ -133,17 +133,18 @@ void* increment(void* parameter){
    int k;
    int n;
    int sockfd;
-
-      char sendline[1000];
+   char sendline[1000];
    char recvline[1000];
    char buffer[1000];
-
    pid_t pid = getpid();
 
+   // Setting up the socket for the thread
    sockfd=socket(AF_INET,SOCK_DGRAM,0);
+
+   // Iteration Loop
    for(k=1;k<=cur_thread->iterations;k++){
       
-
+      // Setting up packet to send for a write request
       strcpy(sendline, "");
       sprintf(buffer, "%d", pid);
       strcat(sendline,buffer);
@@ -160,11 +161,10 @@ void* increment(void* parameter){
       strcat(sendline,"|");
       strcat(sendline,"X");
       
-      // REQUEST
-            sendto(sockfd,sendline,strlen(sendline),0,
-             (struct sockaddr *)&servaddr,sizeof(servaddr));
-            // printf("Writer: %d COnnected SENT: %s\n",cur_thread->thread_id, sendline);
-            printf("Writer: %d COnnected \n",cur_thread->thread_id+1);
+      // Requesting write permission
+      sendto(sockfd,sendline,strlen(sendline),0, (struct sockaddr *)&servaddr,sizeof(servaddr));
+      
+      printf("Writer: %d COnnected \n",cur_thread->thread_id+1);
       // GET AWK
       n=recvfrom(sockfd,recvline,10000,0,NULL,NULL);
       recvline[n]=0;

@@ -1,4 +1,4 @@
-// Information for each thread, including the thread's lock and all of the reader's locks
+// Information for each thread
 typedef struct thread_data{
 	int thread_id;
 	int iterations;
@@ -8,6 +8,7 @@ typedef struct thread_data{
 	struct sockaddr_in servaddr;
 } thread_data;
 
+// Queue nodes
 typedef struct ticketNode{
 	int pid;
 	char requestType;
@@ -15,10 +16,10 @@ typedef struct ticketNode{
 	int thread_id;
 	int iteration;
 	struct sockaddr_in cliaddr;
-	struct ticketNode * head;
 	struct ticketNode * next;
 } ticketNode;
 
+// Struct to house flags to keep writers and readers permission
 typedef struct clientGroupInfo{
 	int pid;
 	int numActiveReaders;
@@ -31,11 +32,11 @@ void* initializeFile(int num_writers, char * filename);
 void* increment(void* parameter);
 // readNumber function that is used for reader threads. The thread will run for the amount of iterations. Before reading it will use it's own lock.
 void* readNumber(void* parameter);
-//
+// Starts a queue for the client given a ticket
 void startClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration, struct sockaddr_in cliaddr);
-//
+// Adds to the queue for a given ticket
 void addToClientQueue(int pid, char requestType, int index, int socketFD, int thread_id, int iteration, struct sockaddr_in cliaddr);
-//
+// Accepts release from client determines how the next element of queue will be ran
 void releaseClientQueue(int index, int pid, char requestType, char release);
-//
+// Dequeues a ticket if it has permissions to run
 void runProcess(int index);

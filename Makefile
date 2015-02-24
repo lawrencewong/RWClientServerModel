@@ -4,7 +4,7 @@ a2server:	a2server.c
 	gcc -g -pthread -std=C99 -o a2server a2server.c
 
 a2client:	a2client.c
-	gcc -g -pthread -std=C99-lm -o a2client a2client.c
+	gcc -g -pthread -std=C99 -lm -o a2client a2client.c
 
 clean:
 	rm a2server
